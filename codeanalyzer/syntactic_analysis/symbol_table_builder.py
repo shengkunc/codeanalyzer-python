@@ -20,6 +20,8 @@ from codeanalyzer.schema.py_schema import (
     PyModule,
     PySymbol,
     PyVariableDeclaration,
+    PyHammockBlock,
+    PyHammockBlockRelation,
 )
 from codeanalyzer.utils import logger
 from codeanalyzer.utils.progress_bar import ProgressBar
@@ -218,6 +220,29 @@ class SymbolTableBuilder:
 
         return {signature: py_class}
 
+    def _hammock_blocks(self, source_code) -> PyHammockBlock:
+        """
+        Builds PyHammockBlock objects from input source code.
+        """
+        _ = source_code
+        return (
+            PyHammockBlock.builder()
+            .block_id("")
+            .block_full_qualifier("")
+            .block_type("")
+            .start_line(0)
+            .end_line(0)
+            .children_ids([])
+            .discard_children_ids([])
+            .children([])
+            .parent(None)
+            .call_sites([])
+            .local_variables([])
+            .accessed_symbols([])
+            .relations([])
+            .build()
+        )
+
     def _callables(self, node: AST, script: Script) -> Dict[str, PyCallable]:
         """
         Builds PyCallable objects from any AST node that may contain functions.
@@ -280,6 +305,7 @@ class SymbolTableBuilder:
                             )
                         )
                         .comments(self._pycomments(child, code))
+                        .hammock_tree_root(self._hammock_blocks(code))
                         .build()
                     )
 

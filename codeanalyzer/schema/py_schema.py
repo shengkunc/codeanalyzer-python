@@ -259,6 +259,39 @@ class PyCallsite(BaseModel):
 
 @builder
 @msgpk
+class PyHammockBlock(BaseModel):
+    """Represents a Hammock block in Python code."""
+    
+    block_id: str
+    block_full_qualifier: str
+    block_type: str  
+    start_line: int = -1
+    end_line: int = -1
+    children_ids: List[str] = []
+    discard_children_ids: List[str] = []
+    children: List['PyHammockBlock'] = []
+    parent: Optional['PyHammockBlock'] = None
+    call_sites: List[PyCallsite] = []
+    local_variables: List[PyVariableDeclaration] = []
+    accessed_symbols: List[PySymbol] = []
+    relations: List['PyHammockBlockRelation'] = []
+
+
+@builder
+@msgpk
+class PyHammockBlockRelation(BaseModel):
+    """Represents a Hammock block relation in Python code."""
+    
+    relation_type: str 
+    target_block_id: str 
+    target_block_full_qualifier: str 
+    functional_description: str 
+    target_block_type: str 
+    related_variables: List[PyCallableParameter] = []
+
+
+@builder
+@msgpk
 class PyCallable(BaseModel):
     """Represents a Python callable (function/method)."""
 
@@ -277,6 +310,7 @@ class PyCallable(BaseModel):
     call_sites: List[PyCallsite] = []
     local_variables: List[PyVariableDeclaration] = []
     cyclomatic_complexity: int = 0
+    hammock_tree_root: Optional[PyHammockBlock] = None
 
     def __hash__(self) -> int:
         """Generate a hash based on the callable's signature."""
