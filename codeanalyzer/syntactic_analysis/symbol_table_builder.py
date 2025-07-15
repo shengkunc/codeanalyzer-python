@@ -26,6 +26,8 @@ from codeanalyzer.schema.py_schema import (
 from codeanalyzer.utils import logger
 from codeanalyzer.utils.progress_bar import ProgressBar
 
+from codeanalyzer.hb_tree_sitter.hbt import HammockBlockTree as hbt
+
 
 class SymbolTableBuilder:
     """A class for building a symbol table for a Python project."""
@@ -88,6 +90,8 @@ class SymbolTableBuilder:
         # Create a Jedi script for the file
         script: Script = Script(path=str(py_file), project=self.jedi_project)
         module = ast.parse(source, filename=str(py_file))
+        # Parse the Hammock Block tree for this module
+        module_hbt = hbt.parse(source, filename=str(py_file))
 
         classes = {}
         functions = {}
