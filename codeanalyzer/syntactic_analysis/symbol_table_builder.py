@@ -95,6 +95,11 @@ class SymbolTableBuilder:
 
         classes = {}
         functions = {}
+        
+        # TODO as of now the builder cannot handle alternative nested structures like
+        # module --> function --> class it only handles
+        # module --> class --> methods
+        # module --> function --> nested functions
         for node in ast.iter_child_nodes(module):
             if isinstance(node, ClassDef):
                 classes.update(self._add_class(node, script))
@@ -263,61 +268,59 @@ class SymbolTableBuilder:
         module_name: str = Path(module_path).stem if module_path else "<unknown>"
 
         def visit(n: AST, class_prefix: str = ""):
+            if isinstance(n, ast.FunctionDef):
+                method_name = n.name
+                start_line = n.lineno
+                end_line = getattr(
+                    n, "end_lineno", start_line + len(n.body)
+                )
+                code_start_line = n.body[0].lineno if n.body else start_line
+                code: str = ast.unparse(n).strip()
+                decorators = [ast.unparse(d) for d in n.decorator_list]
+
+                try:
+                    definitions = script.goto(
+                        line=start_line, column=n.col_offset
+                    )
+                except Exception:
+                    definitions = []
+
+                signature = next(
+                    (d.full_name for d in definitions if d.type == "function"),
+                    f"{module_name}.{class_prefix}{method_name}",
+                )
+
+                callables[method_name] = (
+                    PyCallable.builder()
+                    .name(method_name)
+                    .path(script.path.__str__())
+                    .signature(signature)
+                    .decorators(decorators)
+                    .code(code)
+                    .start_line(start_line)
+                    .end_line(end_line)
+                    .code_start_line(code_start_line)
+                    .accessed_symbols(self._accessed_symbols(n, script))
+                    .call_sites(self._call_sites(n, script))
+                    .local_variables(self._local_variables(n, script))
+                    .cyclomatic_complexity(self._cyclomatic_complexity(n))
+                    .parameters(self._callable_parameters(n, script))
+                    .return_type(
+                        ast.unparse(n.returns)
+                        if n.returns
+                        else self._infer_type(
+                            script, n.lineno, n.col_offset
+                        )
+                    )
+                    .comments(self._pycomments(n, code))
+                    .hammock_tree_root(self._hammock_blocks(code))
+                    .build()
+                )
             for child in ast.iter_child_nodes(n):
                 if isinstance(child, ast.FunctionDef):
-                    method_name = child.name
-                    start_line = child.lineno
-                    end_line = getattr(
-                        child, "end_lineno", start_line + len(child.body)
-                    )
-                    code_start_line = child.body[0].lineno if child.body else start_line
-                    code: str = ast.unparse(child).strip()
-                    decorators = [ast.unparse(d) for d in child.decorator_list]
-
-                    try:
-                        definitions = script.goto(
-                            line=start_line, column=child.col_offset
-                        )
-                    except Exception:
-                        definitions = []
-
-                    signature = next(
-                        (d.full_name for d in definitions if d.type == "function"),
-                        f"{module_name}.{class_prefix}{method_name}",
-                    )
-
-                    callables[method_name] = (
-                        PyCallable.builder()
-                        .name(method_name)
-                        .path(script.path.__str__())
-                        .signature(signature)
-                        .decorators(decorators)
-                        .code(code)
-                        .start_line(start_line)
-                        .end_line(end_line)
-                        .code_start_line(code_start_line)
-                        .accessed_symbols(self._accessed_symbols(child, script))
-                        .call_sites(self._call_sites(child, script))
-                        .local_variables(self._local_variables(child, script))
-                        .cyclomatic_complexity(self._cyclomatic_complexity(child))
-                        .parameters(self._callable_parameters(child, script))
-                        .return_type(
-                            ast.unparse(child.returns)
-                            if child.returns
-                            else self._infer_type(
-                                script, child.lineno, child.col_offset
-                            )
-                        )
-                        .comments(self._pycomments(child, code))
-                        .hammock_tree_root(self._hammock_blocks(code))
-                        .build()
-                    )
-
-                    visit(child, class_prefix + method_name + ".")
-
+                    visit(child, class_prefix + n.name + ".")
                 elif isinstance(child, ast.ClassDef):
                     visit(child, class_prefix + child.name + ".")
-
                 elif hasattr(child, "body"):
                     visit(child, class_prefix)
 
