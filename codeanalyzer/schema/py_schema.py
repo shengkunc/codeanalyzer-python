@@ -269,7 +269,7 @@ class PyHammockBlock(BaseModel):
     end_line: int = -1
     meta_data: dict = {}
     children: List[int] = []
-    parent: Optional[str] = None
+    parent: Optional[int] = None
     call_sites: List[PyCallsite] = []
     local_variables: List[PyVariableDeclaration] = []
     accessed_symbols: List[PySymbol] = []

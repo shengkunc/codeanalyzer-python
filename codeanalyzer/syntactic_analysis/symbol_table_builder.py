@@ -92,7 +92,7 @@ class SymbolTableBuilder:
         script: Script = Script(path=str(py_file), project=self.jedi_project)
         module = ast.parse(source, filename=str(py_file))
         # Parse the Hammock Block tree for the file
-        py_hbt_root, converted_hbt_map, ori_hbt_map = hbt.parse(source, filename=str(py_file))
+        _, converted_hbt_map, _ = hbt.parse(source, filename=str(py_file))
 
         classes = {}
         functions = {}
@@ -103,7 +103,7 @@ class SymbolTableBuilder:
         # module --> function --> nested functions
         for node in ast.iter_child_nodes(module):
             if isinstance(node, ClassDef):
-                classes.update(self._add_class(node, script))
+                classes.update(self._add_class(node, script, py_file.stem, converted_hbt_map))
             elif isinstance(node, ast.FunctionDef):
                 functions.update(self._callables(node, script))
 
@@ -170,7 +170,7 @@ class SymbolTableBuilder:
         return imports
 
     def _add_class(
-        self, class_node: ast.ClassDef, script: Script
+        self, class_node: ast.ClassDef, script: Script, module_name: str, converted_hbt_map: Optional[Dict[str, PyHammockBlock]] = None
     ) -> Dict[str, PyClass]:
         """Builds a PyClass from a class definition node.
 
@@ -188,11 +188,11 @@ class SymbolTableBuilder:
             )
             signature = next(
                 (d.full_name for d in definitions if d.type == "class"),
-                f"{script.path.__str__().replace('/', '.').replace('.py', '')}.{class_node.name}",
+                f"{script.path.__str__().replace('.py', '').replace('/', '.')}.{class_node.name}",
             )
         except Exception:
             signature = (
-                f"{script.path.__str__().replace('/', '.').replace('.py', '')}.{class_node.name}",
+                f"{script.path.__str__().replace('.py', '').replace('/', '.')}.{class_node.name}",
             )
 
         code: str = ast.unparse(class_node).strip()
@@ -226,6 +226,9 @@ class SymbolTableBuilder:
                     for k, v in self._add_class(child, script).items()
                 }
             )
+            .hammock_block_tree(self._hb_subtree_root(converted_hbt_map,
+                                                      module_name + "." + class_node.name,  
+                                                      str(script.path)))
             .build()
         )
 
@@ -917,6 +920,7 @@ class SymbolTableBuilder:
                     symbol_table[str(py_file)] = py_module
                 except Exception as e:
                     logger.error(f"Failed to process {py_file}: {e}")
+                    raise e
                 progress.advance()
             progress.finish("✅ Symbol table generation complete.")
 
