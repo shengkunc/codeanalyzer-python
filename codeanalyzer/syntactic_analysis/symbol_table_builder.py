@@ -27,6 +27,7 @@ from codeanalyzer.utils import logger
 from codeanalyzer.utils.progress_bar import ProgressBar
 
 from codeanalyzer.hb_tree_sitter.hbt import HammockBlockTree as hbt
+from codeanalyzer.hb_tree_sitter.hb_definition import TSHammockBlock, TSHBRelation
 
 
 class SymbolTableBuilder:
@@ -90,8 +91,8 @@ class SymbolTableBuilder:
         # Create a Jedi script for the file
         script: Script = Script(path=str(py_file), project=self.jedi_project)
         module = ast.parse(source, filename=str(py_file))
-        # Parse the Hammock Block tree for this module
-        module_hbt = hbt.parse(source, filename=str(py_file))
+        # Parse the Hammock Block tree for the file
+        py_hbt_root, converted_hbt_map, ori_hbt_map = hbt.parse(source, filename=str(py_file))
 
         classes = {}
         functions = {}
@@ -115,6 +116,7 @@ class SymbolTableBuilder:
             .variables(self._module_variables(module, script))
             .classes(classes)
             .functions(functions)
+            .hammock_block_tree(self._hb_subtree_root(converted_hbt_map, py_file.stem, str(py_file)))
             .build()
         )
 
@@ -229,28 +231,16 @@ class SymbolTableBuilder:
 
         return {signature: py_class}
 
-    def _hammock_blocks(self, source_code) -> PyHammockBlock:
+    def _hb_subtree_root(self, tshbt_map, full_qualifier: str, file_path: str) -> PyHammockBlock:
         """
-        Builds PyHammockBlock objects from input source code.
+        Gets the Hammock Block subtree root for a given full qualifier and file path.
         """
-        _ = source_code
-        return (
-            PyHammockBlock.builder()
-            .block_id("")
-            .block_full_qualifier("")
-            .block_type("")
-            .start_line(0)
-            .end_line(0)
-            .children_ids([])
-            .discard_children_ids([])
-            .children([])
-            .parent(None)
-            .call_sites([])
-            .local_variables([])
-            .accessed_symbols([])
-            .relations([])
-            .build()
-        )
+        if tshbt_map is None:
+            return None
+        for hb in tshbt_map["hammock_blocks"]:
+            if hb.block_full_qualifier == full_qualifier and hb.meta_data.get("source_file") == file_path:
+                return hb
+        return None
 
     def _callables(self, node: AST, script: Script) -> Dict[str, PyCallable]:
         """
@@ -313,7 +303,7 @@ class SymbolTableBuilder:
                         )
                     )
                     .comments(self._pycomments(n, code))
-                    .hammock_tree_root(self._hammock_blocks(code))
+                    # .hbt_root(self._hbt_root(code))
                     .build()
                 )
             for child in ast.iter_child_nodes(n):

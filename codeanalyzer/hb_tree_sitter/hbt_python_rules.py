@@ -1,5 +1,5 @@
 from tree_sitter import Language, Parser, Tree, Node, Point
-from codeanalyzer.hb_tree_sitter.hb_definition import TSHammockBlock, Relation
+from codeanalyzer.hb_tree_sitter.hb_definition import TSHammockBlock, TSHBRelation
 from typing import NewType, Dict, Callable
 from functools import wraps
 from codeanalyzer.hb_tree_sitter.hbt_dispatcher import ts_node_overload
@@ -591,7 +591,7 @@ class PythonTSHBParsingRules:
             raise ValueError(f"Unsupported cg_backend: {self.cg_backend}. Supported backends are: codeql, scalpel.")
         
         # Step 4: Create a relation and add it to the hammock blocks
-        caller_relation = Relation(
+        caller_relation = TSHBRelation(
             relation_type="function_call-callee",
             target_block_id=callee_block.block_id,
             functional_description="Function call to callee",
@@ -599,7 +599,7 @@ class PythonTSHBParsingRules:
             related_variables=[],  # This information should already be in the code snippet
             target_block_full_qualifier = callee_block.block_full_qualifier,
         ) 
-        callee_relation = Relation(
+        callee_relation = TSHBRelation(
             relation_type="function_call-caller",
             target_block_id=caller_block.block_id,
             functional_description="Function call from caller",

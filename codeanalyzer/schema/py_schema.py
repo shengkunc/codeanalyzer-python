@@ -262,15 +262,14 @@ class PyCallsite(BaseModel):
 class PyHammockBlock(BaseModel):
     """Represents a Hammock block in Python code."""
     
-    block_id: str
+    block_id: int
     block_full_qualifier: str
     block_type: str  
     start_line: int = -1
     end_line: int = -1
-    children_ids: List[str] = []
-    discard_children_ids: List[str] = []
-    children: List['PyHammockBlock'] = []
-    parent: Optional['PyHammockBlock'] = None
+    meta_data: dict = {}
+    children: List[int] = []
+    parent: Optional[str] = None
     call_sites: List[PyCallsite] = []
     local_variables: List[PyVariableDeclaration] = []
     accessed_symbols: List[PySymbol] = []
@@ -310,7 +309,7 @@ class PyCallable(BaseModel):
     call_sites: List[PyCallsite] = []
     local_variables: List[PyVariableDeclaration] = []
     cyclomatic_complexity: int = 0
-    hammock_tree_root: Optional[PyHammockBlock] = None
+    hammock_block_tree: Optional[PyHammockBlock] = None
 
     def __hash__(self) -> int:
         """Generate a hash based on the callable's signature."""
@@ -344,6 +343,7 @@ class PyClass(BaseModel):
     inner_classes: Dict[str, "PyClass"] = {}
     start_line: int = -1
     end_line: int = -1
+    hammock_block_tree: Optional[PyHammockBlock] = None
 
     def __hash__(self):
         """Generate a hash based on the class's signature."""
@@ -362,6 +362,7 @@ class PyModule(BaseModel):
     classes: Dict[str, PyClass] = {}
     functions: Dict[str, PyCallable] = {}
     variables: List[PyVariableDeclaration] = []
+    hammock_block_tree: Optional[PyHammockBlock] = None
 
 
 @builder

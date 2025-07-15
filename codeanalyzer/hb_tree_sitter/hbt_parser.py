@@ -1,5 +1,5 @@
 from tree_sitter import Language, Parser, Tree, Node
-from codeanalyzer.hb_tree_sitter.hb_definition import TSHammockBlock, Relation
+from codeanalyzer.hb_tree_sitter.hb_definition import TSHammockBlock, TSHBRelation
 from typing import List, Optional
 import codeanalyzer.hb_tree_sitter.hbt_python_rules as hbt_python_rules
 import codeanalyzer.hb_tree_sitter.hbt_configs as hbt_configs
@@ -202,8 +202,11 @@ class PyHbtParser:
             raise ValueError(f"Unsupported parsing mode: {self.parsing_mode}.")
         return
 
-    def get_full_pdg(self) -> TSHammockBlock:
+    def get_full_pdg(self):
         return self.pdg_map
+
+    def get_full_pdg_map(self, filename):
+        return self.pdg_map.get(filename, None)
     
     def get_full_hbt_root(self, filename) -> Optional[TSHammockBlock]:
         if filename in self.pdg_map:

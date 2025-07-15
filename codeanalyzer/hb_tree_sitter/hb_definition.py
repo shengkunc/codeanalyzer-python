@@ -20,11 +20,11 @@ class TSHammockBlock:
     local_callsites: List[str] = field(default_factory=list)
     imported_packages: List[str] = field(default_factory=list)
     comments: List[str] = field(default_factory=list)
-    relations: List['Relation'] = field(default_factory=list)
+    relations: List['TSHBRelation'] = field(default_factory=list)
 
 
 @dataclass
-class Relation:
+class TSHBRelation:
     relation_type: str = ""
     target_block_id: str = ""
     target_block_full_qualifier: str = ""
