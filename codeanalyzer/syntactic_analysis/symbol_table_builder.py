@@ -26,7 +26,7 @@ from codeanalyzer.schema.py_schema import (
 from codeanalyzer.utils import logger
 from codeanalyzer.utils.progress_bar import ProgressBar
 
-from codeanalyzer.hb_tree_sitter.hbt import HammockBlockTree as hbt
+from codeanalyzer.hb_tree_sitter.hbt_interface import HammockBlockTree as hbt
 from codeanalyzer.hb_tree_sitter.hb_definition import TSHammockBlock, TSHBRelation
 
 
@@ -92,8 +92,9 @@ class SymbolTableBuilder:
         script: Script = Script(path=str(py_file), project=self.jedi_project)
         module = ast.parse(source, filename=str(py_file))
         # Parse the Hammock Block tree for the file
-        _, converted_hbt_map, _ = hbt.parse(source, filename=str(py_file))
+        _, converted_hbt_map, ts_hbt_map = hbt.parse(source, filename=str(py_file))
         self.converted_hbt_map = converted_hbt_map
+        self.ts_hbt_map = ts_hbt_map
         classes = {}
         functions = {}
         
@@ -106,17 +107,26 @@ class SymbolTableBuilder:
                 classes.update(self._add_class(node, script, py_file.stem))
             elif isinstance(node, ast.FunctionDef):
                 functions.update(self._callables(node, script))
-
+        variables = self._module_variables(module, script)
         return (
             PyModule.builder()
             .file_path(str(py_file))
             .module_name(py_file.stem)
             .comments(self._pycomments(module, source))
             .imports(self._imports(module))
-            .variables(self._module_variables(module, script))
+            .variables(variables)
             .classes(classes)
             .functions(functions)
-            .hammock_blocks(self._hb_subtree_root(py_file.stem, str(py_file)))
+            .hammock_block(self._hammock_decomposition(py_file.stem, 
+                                            str(py_file), 
+                                            local_variables=variables,
+                                            accessed_symbols=[],
+                                            level="module"))
+            .all_hammock_blocks_list(
+                [hb for hb in self.converted_hbt_map["hammock_blocks"]]
+                if self.converted_hbt_map is not None
+                else []
+            )
             .build()
         )
 
@@ -195,7 +205,7 @@ class SymbolTableBuilder:
             )
 
         code: str = ast.unparse(class_node).strip()
-
+        attributes = self._class_attributes(class_node, script)
         py_class = (
             PyClass.builder()
             .name(class_node.name)
@@ -216,7 +226,7 @@ class SymbolTableBuilder:
                 ]
             )
             .methods(self._callables(class_node, script))
-            .attributes(self._class_attributes(class_node, script))
+            .attributes(attributes)
             .inner_classes(
                 {
                     k: v
@@ -225,25 +235,171 @@ class SymbolTableBuilder:
                     for k, v in self._add_class(child, script).items()
                 }
             )
-            .hammock_blocks(self._hb_subtree_root(module_name + "." + class_node.name, str(script.path)))
+            .hammock_block(
+                self._hammock_decomposition(module_name + "." + class_node.name, 
+                                            str(script.path), 
+                                            local_variables=attributes,
+                                            accessed_symbols=[],
+                                            level="class"))
             .build()
         )
 
         return {signature: py_class}
 
-    def _hb_subtree_root(self, full_qualifier: str, file_path: str) -> PyHammockBlock:
+    def _hammock_decomposition(self, full_qualifier: str, file_path: str,
+                               local_variables, accessed_symbols, level) -> PyHammockBlock:
         """
         Gets the Hammock Block subtree root for a given full qualifier and file path.
         """
-        tshbt_map = self.converted_hbt_map
-        if tshbt_map is None:
+        if self.converted_hbt_map is None:
             return None
-        for hb in tshbt_map["hammock_blocks"]:
+        hb_identified = None
+        for hb in self.converted_hbt_map["hammock_blocks"]:
             if hb.block_full_qualifier == full_qualifier and hb.meta_data.get("source_file") == file_path:
-                return hb
-        print(f"No Hammock Block found for {full_qualifier} in {file_path}")
-        return None
+                hb_identified = hb
+                break
+        if hb_identified is None:
+            print(f"No Hammock Block found for {full_qualifier} in {file_path}")
+            return None
+        else:
+            # fill in the local variables and accessed symbols according to levels
+            if level == "module":
+                children_hbs = self._hb_subtree_blocks_recursive(hb_identified.block_id)
+                # only plain expression statements directly under module are eligible for module level variables
+                eligible_hbs = []
+                for hb in children_hbs:
+                    if hb.block_type == "expression_statement" and hb.parent == hb_identified.block_id:
+                        eligible_hbs.append(hb)
+                for variable in local_variables:
+                    name = variable.name
+                    start_line = variable.start_line
+                    end_line = variable.end_line
+                    scope = variable.scope
+                    current_placement = hb_identified
+                    assert scope == "module"
+                    for eligible_hb in eligible_hbs: 
+                        if start_line >= eligible_hb.start_line and end_line <= eligible_hb.end_line:
+                            if (name in self._ts_local_variables(eligible_hb.block_id)) and (eligible_hb.start_line > current_placement.start_line or eligible_hb.end_line < current_placement.end_line):
+                                current_placement = eligible_hb
+                    already_exists = False
+                    for existing_variable in current_placement.local_variables:
+                        if existing_variable.name == name and existing_variable.start_line == start_line and existing_variable.end_line == end_line:
+                            already_exists = True
+                            break
+                    if not already_exists:
+                        current_placement.local_variables.append(variable)
+            elif level == "class":
+                children_hbs = self._hb_subtree_blocks_recursive(hb_identified.block_id)                
+                # only plain expression statements are eligible for module level variables
+                eligible_hbs = []
+                for hb in children_hbs:
+                    if hb.block_type == "expression_statement" and hb.parent == hb_identified.block_id:
+                        eligible_hbs.append(hb)
+                for variable in local_variables.values():
+                    name = variable.name
+                    start_line = variable.start_line
+                    end_line = variable.end_line
+                    current_placement = hb_identified
+                    for eligible_hb in eligible_hbs: 
+                        if start_line >= eligible_hb.start_line and end_line <= eligible_hb.end_line:
+                            if (name in self._ts_local_variables(eligible_hb.block_id)) and (eligible_hb.start_line > current_placement.start_line or eligible_hb.end_line < current_placement.end_line):
+                                current_placement = eligible_hb
+                    already_exists = False
+                    for existing_variable in current_placement.local_variables:
+                        if existing_variable.name == name and existing_variable.start_line == start_line and existing_variable.end_line == end_line:
+                            already_exists = True
+                            break
+                    if not already_exists:
+                        current_placement.class_attributes.append(variable)
+            elif level == "funcmeth":
+                eligible_hbs = self._hb_subtree_blocks_recursive(hb_identified.block_id)
+                for variable in local_variables:
+                    name = variable.name
+                    start_line = variable.start_line
+                    end_line = variable.end_line
+                    scope = variable.scope
+                    current_placement = hb_identified
+                    assert scope == "local" or scope == "function"
+                    for eligible_hb in eligible_hbs: 
+                        if start_line >= eligible_hb.start_line and end_line <= eligible_hb.end_line:
+                            if (eligible_hb.start_line > current_placement.start_line or eligible_hb.end_line < current_placement.end_line):
+                                if (name not in self._ts_local_variables(eligible_hb.block_id)):
+                                    print(f"Warning: Variable {name} not found in original ts hammock block {eligible_hb.block_id}")
+                                current_placement = eligible_hb
+                    already_exists = False
+                    for existing_variable in current_placement.local_variables:
+                        if existing_variable.name == name and existing_variable.start_line == start_line and existing_variable.end_line == end_line:
+                            already_exists = True
+                            break
+                    if not already_exists:
+                        current_placement.local_variables.append(variable)
+            
+                for symbols in accessed_symbols:
+                    name = symbols.name
+                    line_number = symbols.lineno
+                    kind = symbols.kind
+                    current_placement = hb_identified
+                    if kind != "variable":
+                        continue
+                    for eligible_hb in eligible_hbs: 
+                        if line_number >= eligible_hb.start_line and line_number <= eligible_hb.end_line:
+                            if (name in self._ts_local_variables(eligible_hb.block_id)) and (eligible_hb.start_line > current_placement.start_line or eligible_hb.end_line < current_placement.end_line):
+                                current_placement = eligible_hb
+                    already_exists = False
+                    for existing_symbol in current_placement.accessed_variables:
+                        if existing_symbol.name == name:
+                            already_exists = True
+                            break
+                    if not already_exists:
+                        current_placement.accessed_variables.append(symbols)
+            else:
+                raise RuntimeError(f"Unknown Hammock Block level: {level}")           
+            return hb_identified
+                    
+    def _hb_subtree_blocks_recursive(self, block_id: str) -> List[TSHammockBlock]:
+        """
+        Recursively collects all Hammock Blocks in the subtree starting with the given block ID.
+        Returns the root block and all its descendants.
+        """
+        subtree_blocks = []
+        
+        # Find the root block first
+        root_block = None
+        for hb in self.converted_hbt_map["hammock_blocks"]:
+            if hb.block_id == block_id:
+                root_block = hb
+                break
+        
+        if root_block is None:
+            return subtree_blocks
+        
+        # Add the root block itself
+        subtree_blocks.append(root_block)
+        
+        # Recursively collect all children
+        def collect_children(parent_id: str):
+            for child in self.converted_hbt_map["hammock_blocks"]:
+                if child.parent:
+                    for temp_hb in self.converted_hbt_map["hammock_blocks"]:
+                        if temp_hb.block_id == child.parent:
+                            parent = temp_hb
+                            break
+                    if parent.block_id == parent_id:
+                        subtree_blocks.append(child)
+                        collect_children(child.block_id)
 
+        collect_children(block_id)
+        return subtree_blocks
+    
+    def _ts_local_variables(self, block_id: str) -> List[str]:
+        """
+        Returns a list of local variable names defined in the Hammock Block with the given ID.
+        """
+        for hb in self.ts_hbt_map["hammock_blocks"]:
+            if hb.block_id == block_id:
+                return [hb.split(".")[-1] for hb in hb.local_variables]
+        return []
+    
     def _callables(self, node: AST, script: Script) -> Dict[str, PyCallable]:
         """
         Builds PyCallable objects from any AST node that may contain functions.
@@ -281,7 +437,8 @@ class SymbolTableBuilder:
                     (d.full_name for d in definitions if d.type == "function"),
                     f"{module_name}.{class_prefix}{method_name}",
                 )
-
+                local_variables = self._local_variables(n, script)
+                accessed_symbols = self._accessed_symbols(n, script)
                 callables[method_name] = (
                     PyCallable.builder()
                     .name(method_name)
@@ -292,9 +449,9 @@ class SymbolTableBuilder:
                     .start_line(start_line)
                     .end_line(end_line)
                     .code_start_line(code_start_line)
-                    .accessed_symbols(self._accessed_symbols(n, script))
+                    .accessed_symbols(accessed_symbols)
                     .call_sites(self._call_sites(n, script))
-                    .local_variables(self._local_variables(n, script))
+                    .local_variables(local_variables)
                     .cyclomatic_complexity(self._cyclomatic_complexity(n))
                     .parameters(self._callable_parameters(n, script))
                     .return_type(
@@ -305,8 +462,12 @@ class SymbolTableBuilder:
                         )
                     )
                     .comments(self._pycomments(n, code))
-                    .hammock_blocks(self._hb_subtree_root(signature, script.path.__str__()
-                    ))
+                    .hammock_block(
+                        self._hammock_decomposition(signature, 
+                                                    script.path.__str__(),
+                                                    local_variables=local_variables,
+                                                    accessed_symbols=accessed_symbols,
+                                                    level="funcmeth"))
                     .build()
                 )
             for child in ast.iter_child_nodes(n):

@@ -272,7 +272,8 @@ class PyHammockBlock(BaseModel):
     parent: Optional[int] = None
     call_sites: List[PyCallsite] = []
     local_variables: List[PyVariableDeclaration] = []
-    accessed_symbols: List[PySymbol] = []
+    accessed_variables: List[PySymbol] = []
+    class_attributes: List[PyVariableDeclaration] = []
     relations: List['PyHammockBlockRelation'] = []
 
 
@@ -309,7 +310,7 @@ class PyCallable(BaseModel):
     call_sites: List[PyCallsite] = []
     local_variables: List[PyVariableDeclaration] = []
     cyclomatic_complexity: int = 0
-    hammock_blocks: Optional[PyHammockBlock] = None
+    hammock_block: Optional[PyHammockBlock] = None
 
     def __hash__(self) -> int:
         """Generate a hash based on the callable's signature."""
@@ -343,7 +344,7 @@ class PyClass(BaseModel):
     inner_classes: Dict[str, "PyClass"] = {}
     start_line: int = -1
     end_line: int = -1
-    hammock_blocks: Optional[PyHammockBlock] = None
+    hammock_block: Optional[PyHammockBlock] = None
 
     def __hash__(self):
         """Generate a hash based on the class's signature."""
@@ -362,7 +363,8 @@ class PyModule(BaseModel):
     classes: Dict[str, PyClass] = {}
     functions: Dict[str, PyCallable] = {}
     variables: List[PyVariableDeclaration] = []
-    hammock_blocks: Optional[PyHammockBlock] = None
+    hammock_block: Optional[PyHammockBlock] = None
+    all_hammock_blocks_list: List[PyHammockBlock] = []
 
 
 @builder

@@ -50,9 +50,10 @@ class HammockBlockTree:
                                 .children(child.block_id for child in children)
                                 .meta_data(node.meta_data)
                                 .local_variables([])
-                                .accessed_symbols([])
+                                .accessed_variables([])
                                 .call_sites([])
                                 .relations([])
+                                .class_attributes([])
                                 .build())
             converted_hbt_map["hammock_blocks"].append(py_hammock_block)
             return py_hammock_block
