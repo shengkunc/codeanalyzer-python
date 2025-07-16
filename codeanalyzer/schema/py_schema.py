@@ -309,7 +309,7 @@ class PyCallable(BaseModel):
     call_sites: List[PyCallsite] = []
     local_variables: List[PyVariableDeclaration] = []
     cyclomatic_complexity: int = 0
-    hammock_block_tree: Optional[PyHammockBlock] = None
+    hammock_blocks: Optional[PyHammockBlock] = None
 
     def __hash__(self) -> int:
         """Generate a hash based on the callable's signature."""
@@ -343,7 +343,7 @@ class PyClass(BaseModel):
     inner_classes: Dict[str, "PyClass"] = {}
     start_line: int = -1
     end_line: int = -1
-    hammock_block_tree: Optional[PyHammockBlock] = None
+    hammock_blocks: Optional[PyHammockBlock] = None
 
     def __hash__(self):
         """Generate a hash based on the class's signature."""
@@ -362,7 +362,7 @@ class PyModule(BaseModel):
     classes: Dict[str, PyClass] = {}
     functions: Dict[str, PyCallable] = {}
     variables: List[PyVariableDeclaration] = []
-    hammock_block_tree: Optional[PyHammockBlock] = None
+    hammock_blocks: Optional[PyHammockBlock] = None
 
 
 @builder

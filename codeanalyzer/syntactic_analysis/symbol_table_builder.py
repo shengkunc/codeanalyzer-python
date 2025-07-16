@@ -93,7 +93,7 @@ class SymbolTableBuilder:
         module = ast.parse(source, filename=str(py_file))
         # Parse the Hammock Block tree for the file
         _, converted_hbt_map, _ = hbt.parse(source, filename=str(py_file))
-
+        self.converted_hbt_map = converted_hbt_map
         classes = {}
         functions = {}
         
@@ -103,7 +103,7 @@ class SymbolTableBuilder:
         # module --> function --> nested functions
         for node in ast.iter_child_nodes(module):
             if isinstance(node, ClassDef):
-                classes.update(self._add_class(node, script, py_file.stem, converted_hbt_map))
+                classes.update(self._add_class(node, script, py_file.stem))
             elif isinstance(node, ast.FunctionDef):
                 functions.update(self._callables(node, script))
 
@@ -116,7 +116,7 @@ class SymbolTableBuilder:
             .variables(self._module_variables(module, script))
             .classes(classes)
             .functions(functions)
-            .hammock_block_tree(self._hb_subtree_root(converted_hbt_map, py_file.stem, str(py_file)))
+            .hammock_blocks(self._hb_subtree_root(py_file.stem, str(py_file)))
             .build()
         )
 
@@ -170,8 +170,7 @@ class SymbolTableBuilder:
         return imports
 
     def _add_class(
-        self, class_node: ast.ClassDef, script: Script, module_name: str, converted_hbt_map: Optional[Dict[str, PyHammockBlock]] = None
-    ) -> Dict[str, PyClass]:
+        self, class_node: ast.ClassDef, script: Script, module_name: str) -> Dict[str, PyClass]:
         """Builds a PyClass from a class definition node.
 
         Args:
@@ -226,23 +225,23 @@ class SymbolTableBuilder:
                     for k, v in self._add_class(child, script).items()
                 }
             )
-            .hammock_block_tree(self._hb_subtree_root(converted_hbt_map,
-                                                      module_name + "." + class_node.name,  
-                                                      str(script.path)))
+            .hammock_blocks(self._hb_subtree_root(module_name + "." + class_node.name, str(script.path)))
             .build()
         )
 
         return {signature: py_class}
 
-    def _hb_subtree_root(self, tshbt_map, full_qualifier: str, file_path: str) -> PyHammockBlock:
+    def _hb_subtree_root(self, full_qualifier: str, file_path: str) -> PyHammockBlock:
         """
         Gets the Hammock Block subtree root for a given full qualifier and file path.
         """
+        tshbt_map = self.converted_hbt_map
         if tshbt_map is None:
             return None
         for hb in tshbt_map["hammock_blocks"]:
             if hb.block_full_qualifier == full_qualifier and hb.meta_data.get("source_file") == file_path:
                 return hb
+        print(f"No Hammock Block found for {full_qualifier} in {file_path}")
         return None
 
     def _callables(self, node: AST, script: Script) -> Dict[str, PyCallable]:
@@ -306,7 +305,8 @@ class SymbolTableBuilder:
                         )
                     )
                     .comments(self._pycomments(n, code))
-                    # .hbt_root(self._hbt_root(code))
+                    .hammock_blocks(self._hb_subtree_root(signature, script.path.__str__()
+                    ))
                     .build()
                 )
             for child in ast.iter_child_nodes(n):
