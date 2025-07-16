@@ -347,7 +347,7 @@ class SymbolTableBuilder:
                                 current_placement = eligible_hb
                     already_exists = False
                     for existing_symbol in current_placement.accessed_variables:
-                        if existing_symbol.name == name:
+                        if existing_symbol.name == name and existing_symbol.lineno == line_number:
                             already_exists = True
                             break
                     if not already_exists:
