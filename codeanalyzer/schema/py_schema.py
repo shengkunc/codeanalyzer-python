@@ -264,6 +264,7 @@ class PyHammockBlock(BaseModel):
     
     block_id: int
     block_full_qualifier: str
+    project_full_qualifier: str
     block_type: str  
     start_line: int = -1
     end_line: int = -1
@@ -365,7 +366,7 @@ class PyModule(BaseModel):
     functions: Dict[str, PyCallable] = {}
     variables: List[PyVariableDeclaration] = []
     hammock_block: Optional[PyHammockBlock] = None
-    all_hammock_blocks_list: List[PyHammockBlock] = []
+    module_hammock_blocks: List[PyHammockBlock] = []
 
 
 @builder

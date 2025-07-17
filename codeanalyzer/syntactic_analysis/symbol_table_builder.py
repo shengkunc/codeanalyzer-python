@@ -1,4 +1,5 @@
 import ast
+import os
 import tokenize
 from ast import AST, ClassDef
 from io import StringIO
@@ -92,7 +93,7 @@ class SymbolTableBuilder:
         script: Script = Script(path=str(py_file), project=self.jedi_project)
         module = ast.parse(source, filename=str(py_file))
         # Parse the Hammock Block tree for the file
-        _, converted_hbt_map, ts_hbt_map = hbt.parse(source, filename=str(py_file))
+        _, converted_hbt_map, ts_hbt_map = hbt.parse(source, filename=str(py_file), project_base=str(self.project_dir))
         self.converted_hbt_map = converted_hbt_map
         self.ts_hbt_map = ts_hbt_map
         classes = {}
@@ -122,14 +123,14 @@ class SymbolTableBuilder:
                                             local_variables=variables,
                                             accessed_symbols=[],
                                             level="module"))
-            .all_hammock_blocks_list(
+            .module_hammock_blocks(
                 [hb for hb in self.converted_hbt_map["hammock_blocks"]]
                 if self.converted_hbt_map is not None
                 else []
             )
             .build()
         )
-        self._hb_data_relations(py_module)
+        self._hb_data_relations()
         return py_module
 
     def _imports(self, module: ast.Module) -> List[PyImport]:
@@ -249,7 +250,7 @@ class SymbolTableBuilder:
         return {signature: py_class}
 
     def _hb_decomposition(self, full_qualifier: str, file_path: str,
-                               local_variables, accessed_symbols, level, func_parameters=[]) -> PyHammockBlock:
+                            local_variables, accessed_symbols, level, func_parameters=[], call_sites=[]) -> PyHammockBlock:
         """
         Gets the Hammock Block subtree root for a given full qualifier and file path.
         """
@@ -370,6 +371,24 @@ class SymbolTableBuilder:
                             break
                     if not already_exists:
                         current_placement.accessed_variables.append(symbols)
+
+                # process call sites
+                for call_site in call_sites:
+                    name = call_site.method_name
+                    start_line = call_site.start_line
+                    end_line = call_site.end_line
+                    current_placement = hb_identified
+                    for eligible_hb in eligible_hbs:
+                        if line_number >= eligible_hb.start_line and line_number <= eligible_hb.end_line:
+                            if (eligible_hb.start_line > current_placement.start_line or eligible_hb.end_line < current_placement.end_line):
+                                current_placement = eligible_hb
+                    already_exists = False
+                    for existing_callsites in current_placement.call_sites:
+                        if existing_callsites.method_name == name and existing_callsites.start_line == start_line and existing_callsites.end_line == end_line:
+                            already_exists = True
+                            break
+                    if not already_exists:
+                        current_placement.call_sites.append(call_site)
             else:
                 raise RuntimeError(f"Unknown Hammock Block level: {level}")           
             return hb_identified
@@ -409,15 +428,94 @@ class SymbolTableBuilder:
         collect_children(block_id)
         return subtree_blocks
     
-    def _hb_data_relations(self, py_module):
-        return
+    def _hb_data_relations(self):
         hbt.build_hb_data_relations(self.converted_hbt_map)
                
     def _hb_call_relations(self, symbol_table: dict[Path, PyModule]):
+        # step 1: for each call site, find the targeted function/class definition
+        # step 2: create a PyHammockBlockRelation for each call site
+        for py_module in symbol_table.values():
+            module_hammock_blocks = py_module.module_hammock_blocks
+            for block in module_hammock_blocks:
+                call_sites = block.call_sites
+                for call_site in call_sites:
+                    callee_signature = call_site.callee_signature
+                    method_name = call_site.method_name
+                    callee_block = None
+                    
+                    # case 1: if the callee_signature is null it is a nested 
+                    # function part of the sibiling block
+                    if callee_signature is None:
+                        # find all sibling blocks
+                        sibling_blocks = [
+                            hb for hb in module_hammock_blocks
+                            if hb.block_id != block.block_id and hb.parent == block.parent
+                        ]
+                        for sb in sibling_blocks:
+                            if sb.block_type == "function_definition" and method_name == sb.block_full_qualifier.split(".")[-1]:
+                                callee_block = sb
+                                break
+                        if callee_block is None:
+                            #TODO create relations
+                            continue
+                    
+                    # case 2: if the callee_signature is not null and match the method name, but the 
+                    # receiver type and expression are both null, module level function call
+                    elif callee_signature is not None and call_site.receiver_type is None and call_site.receiver_expr is None and method_name == callee_signature.split(".")[-1]:
+                        callee_path, _ = self._resolve_hb_callee_path(callee_signature, list(symbol_table.keys()))
+                        py_module = symbol_table.get(Path(callee_path))
+                        relevant_blocks = [hb for hb in py_module.module_hammock_blocks]
+                        for block in relevant_blocks:
+                            if len(block.project_full_qualifier) and block.project_full_qualifier == callee_signature: 
+                                callee_block = block
+                                break
+                        if callee_block is None:
+                            #TODO create relations
+                            continue     
+                    
+                    # case 3:  if the callee_signature is not null and does not match the method name, but the
+                    # receiver type or receiver expression is not null, class level method call
+                    elif callee_signature is not None and (call_site.receiver_type is not None or call_site.receiver_expr is not None):
+                        real_callee_signature = callee_signature + "." + method_name
+                        callee_path, _ = self._resolve_hb_callee_path(real_callee_signature, list(symbol_table.keys()))
+                        relevant_blocks = [hb for hb in py_module.module_hammock_blocks]
+                        for block in relevant_blocks:
+                            if len(block.project_full_qualifier) and block.project_full_qualifier == real_callee_signature: 
+                                callee_block = block
+                                break
+                        if callee_block is None:
+                            #TODO create relations
+                            continue
+                    else:
+                        logger.error(f"Unexpected call site: {call_site}, investigate")
+                        continue     
         return
-        # step 1: for each Hammock Block, find all call sites
-        # step 2: for each call site, find the targeted function/class definition
-        # step 3: create a PyHammockBlockRelation for each call site
+    
+    def _resolve_hb_callee_path(self, callee_signature: str, file_paths:str) -> str:
+        relative_paths = [file_path.replace(str(self.project_dir) + "/", "") for file_path in file_paths]
+        relative_modules = [os.path.splitext(path)[0].replace("/", ".") for path in relative_paths]
+        def longest_common_substring(src, target):
+            m = len(src)
+            n = len(target)
+            dp_table = [[0] * (n + 1) for _ in range(m + 1)]
+            res = 0
+            for i in range(1, m + 1):
+                for j in range(1, n + 1):
+                    if src[i - 1] == target[j - 1]:
+                        dp_table[i][j] = dp_table[i - 1][j - 1] + 1
+                        res = max(res, dp_table[i][j])
+                    else:
+                        dp_table[i][j] = 0
+            return res
+        idx = 0
+        global_max = 0
+        for idx, module in enumerate(relative_modules):
+            lcs = longest_common_substring(module, callee_signature)
+            if lcs > global_max:
+                global_max = lcs
+                callee_path = relative_paths[idx]
+                callee_module = module
+        return callee_path, callee_module
     
     def _ts_local_variables(self, block_id: str) -> List[str]:
         """
@@ -468,6 +566,7 @@ class SymbolTableBuilder:
                 local_variables = self._local_variables(n, script)
                 accessed_symbols = self._accessed_symbols(n, script)
                 parameters = self._callable_parameters(n, script)
+                call_sites = self._call_sites(n, script)
                 callables[method_name] = (
                     PyCallable.builder()
                     .name(method_name)
@@ -479,7 +578,7 @@ class SymbolTableBuilder:
                     .end_line(end_line)
                     .code_start_line(code_start_line)
                     .accessed_symbols(accessed_symbols)
-                    .call_sites(self._call_sites(n, script))
+                    .call_sites(call_sites)
                     .local_variables(local_variables)
                     .cyclomatic_complexity(self._cyclomatic_complexity(n))
                     .parameters(parameters)
@@ -493,11 +592,12 @@ class SymbolTableBuilder:
                     .comments(self._pycomments(n, code))
                     .hammock_block(
                         self._hb_decomposition(signature, 
-                                                    script.path.__str__(),
-                                                    local_variables=local_variables,
-                                                    accessed_symbols=accessed_symbols,
-                                                    level="funcmeth",
-                                                    func_parameters=parameters))
+                                                script.path.__str__(),
+                                                local_variables=local_variables,
+                                                accessed_symbols=accessed_symbols,
+                                                level="funcmeth",
+                                                func_parameters=parameters,
+                                                call_sites=call_sites))
                     .build()
                 )
             for child in ast.iter_child_nodes(n):

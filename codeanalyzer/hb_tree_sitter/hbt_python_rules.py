@@ -45,11 +45,19 @@ class PythonTSHBParsingRules:
         print(f"[PYTHON] Dispatched to parse_module for node: {node.type}")
         print(f"[PYTHON] Module at line {node.start_point.row + 1}")
         hammock_block = self._base_block_builder(node)
+        
+        project_base = self.src_file_to_dir_map["project_base"]
+        relative_path = source_file.replace(project_base + os.sep, "")
+        basename_no_ext = os.path.splitext(relative_path)[0]
+        basename_no_ext = basename_no_ext.replace(os.sep, ".")
+        hammock_block.project_full_qualifier = basename_no_ext
+        
         source_dir = self.src_file_to_dir_map[source_file]
         relative_path = source_file.replace(source_dir + os.sep, "")
         basename_no_ext = os.path.splitext(relative_path)[0]
-        basename_no_ext = basename_no_ext.replace(os.sep, ".")  # Convert path separators to dots
+        basename_no_ext = basename_no_ext.replace(os.sep, ".")
         hammock_block.block_full_qualifier = basename_no_ext
+        
         return hammock_block, []
     
     @parse_ts_node.register("import_statement")
@@ -122,6 +130,9 @@ class PythonTSHBParsingRules:
                 break
             current_parent = current_parent.parent
         hammock_block.block_full_qualifier = block_map[current_parent.id].block_full_qualifier + "." + name_node.text.decode("utf-8") if name_node else ""
+        
+        hammock_block.project_full_qualifier = block_map[current_parent.id].project_full_qualifier + "." + name_node.text.decode("utf-8") if name_node else ""
+        
         return hammock_block, []
     
     @parse_ts_node.register("function_definition")
@@ -145,6 +156,8 @@ class PythonTSHBParsingRules:
                 break
             current_parent = current_parent.parent
         hammock_block.block_full_qualifier = block_map[current_parent.id].block_full_qualifier + "." + name_node.text.decode("utf-8") if name_node else ""
+        
+        hammock_block.project_full_qualifier = block_map[current_parent.id].project_full_qualifier + "." + name_node.text.decode("utf-8") if name_node else ""
         return hammock_block, []
     
     @parse_ts_node.register("return_statement")

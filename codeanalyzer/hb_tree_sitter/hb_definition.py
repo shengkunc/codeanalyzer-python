@@ -7,6 +7,7 @@ class TSHammockBlock:
     meta_data: dict = field(default_factory=dict)
     block_id: str = ""
     block_full_qualifier: str = ""
+    project_full_qualifier: str = ""
     block_type: str = ""
     start_point: Optional[Point] = None
     end_point: Optional[Point] = None

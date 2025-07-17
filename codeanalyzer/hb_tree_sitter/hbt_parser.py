@@ -10,12 +10,13 @@ import glob
 
 
 class PyHbtParser:
-    def __init__(self, source: str, filename: str, source_code_dir_list: list = [], parsing_mode: str = "rule-based"):
+    def __init__(self, source: str, filename: str, project_base: str, source_code_dir_list: list = [], parsing_mode: str = "rule-based"):
         self.block_map = {}  # block_id to TSHammockBlock
         self.tstree_map = {}  # source_file to tree-sitter tree
         self.pdg_map = {}  # source_file to PDGs
         self.parsing_mode = parsing_mode
         self.parsing_rules = None
+        self.project_base = project_base
         
         # Import the parsing rules based on the mode
         if self.parsing_mode not in ["rule-based", "default"]:
@@ -24,7 +25,8 @@ class PyHbtParser:
         py_language = Language(tspython.language())
         self.parser = Parser(py_language)
         self.src_file_to_dir_map = {
-            filename: os.path.dirname(filename)
+            filename: os.path.dirname(filename),
+            "project_base": project_base
         }
         if self.parsing_mode != "default":
             self.parsing_rules = hbt_python_rules.PythonTSHBParsingRules(source_code_dir_list, self.src_file_to_dir_map, cg_backend=hbt_configs.PY_CG_BACKEND)

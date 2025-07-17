@@ -9,11 +9,11 @@ class HammockBlockTreeBuilder:
     This class is used to parse and analyze the structure of Hammock Blocks in Python code.
     """
     @staticmethod
-    def parse(source: str, filename: str) -> Optional[TSHammockBlock]:
+    def parse(source: str, filename: str, project_base: str) -> Optional[TSHammockBlock]:
         """
         Parses the source code and returns a Hammock block tree instance.
         """
-        hbt_parser = PyHbtParser(source, filename)
+        hbt_parser = PyHbtParser(source, filename, project_base)
         ori_hbt_map = hbt_parser.get_full_pdg_map(filename)
         py_hbt_root, converted_hbt_map = HammockBlockTreeBuilder._convert_to_hbt(ori_hbt_map)
         return py_hbt_root, converted_hbt_map, ori_hbt_map 
@@ -44,6 +44,7 @@ class HammockBlockTreeBuilder:
             py_hammock_block = (PyHammockBlock.builder()
                                 .block_id(node.block_id)
                                 .block_full_qualifier(node.block_full_qualifier)
+                                .project_full_qualifier(node.project_full_qualifier)
                                 .block_type(node.block_type)
                                 .start_line(node.start_point.row + 1 if node.start_point else -1)
                                 .end_line(node.end_point.row + 1 if node.end_point else -1)
