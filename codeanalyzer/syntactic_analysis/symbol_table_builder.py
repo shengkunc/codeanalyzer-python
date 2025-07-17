@@ -26,7 +26,7 @@ from codeanalyzer.schema.py_schema import (
 from codeanalyzer.utils import logger
 from codeanalyzer.utils.progress_bar import ProgressBar
 
-from codeanalyzer.hb_tree_sitter.hbt_interface import HammockBlockTree as hbt
+from codeanalyzer.hb_tree_sitter.hbt_interface import HammockBlockTreeBuilder as hbt
 from codeanalyzer.hb_tree_sitter.hb_definition import TSHammockBlock, TSHBRelation
 
 
@@ -249,7 +249,7 @@ class SymbolTableBuilder:
         return {signature: py_class}
 
     def _hb_decomposition(self, full_qualifier: str, file_path: str,
-                               local_variables, accessed_symbols, level) -> PyHammockBlock:
+                               local_variables, accessed_symbols, level, func_parameters=[]) -> PyHammockBlock:
         """
         Gets the Hammock Block subtree root for a given full qualifier and file path.
         """
@@ -315,6 +315,21 @@ class SymbolTableBuilder:
                         current_placement.class_attributes.append(variable)
             elif level == "funcmeth":
                 eligible_hbs = self._hb_subtree_blocks_recursive(hb_identified.block_id)
+                # process function parameters
+                for parameter in func_parameters:
+                    name = parameter.name
+                    start_line = parameter.start_line
+                    end_line = parameter.end_line
+                    current_placement = hb_identified
+                    already_exists = False
+                    for existing_parameters in current_placement.func_parameters:
+                        if existing_parameters.name == name and existing_parameters.start_line == start_line and existing_parameters.end_line == end_line:
+                            already_exists = True
+                            break
+                    if not already_exists:
+                        current_placement.func_parameters.append(parameter)
+                
+                # process local variables
                 for variable in local_variables:
                     name = variable.name
                     start_line = variable.start_line
@@ -335,7 +350,8 @@ class SymbolTableBuilder:
                             break
                     if not already_exists:
                         current_placement.local_variables.append(variable)
-            
+                
+                # process accessed symbols
                 for symbols in accessed_symbols:
                     name = symbols.name
                     line_number = symbols.lineno
@@ -393,23 +409,15 @@ class SymbolTableBuilder:
         collect_children(block_id)
         return subtree_blocks
     
-    def _hb_data_relations(self, py_module: PyModule) -> None:
-        if self.converted_hbt_map is None:
-            return
-        for hb in self.converted_hbt_map["hammock_blocks"]:
-            accessed_variables = hb.accessed_variables
-            for variable in accessed_variables:
-                # step 1: first search local block
-                # step 2: if not found, search sibiling block
-                # step 3: if still not found search parent block
-                # step 4: or alternatively search all blocks in the Hammock Block map
-                pass
+    def _hb_data_relations(self, py_module):
+        return
+        hbt.build_hb_data_relations(self.converted_hbt_map)
                
-    def _hb_call_relations(self, symbol_table: dict[Path, PyModule]) -> None:
+    def _hb_call_relations(self, symbol_table: dict[Path, PyModule]):
+        return
         # step 1: for each Hammock Block, find all call sites
         # step 2: for each call site, find the targeted function/class definition
         # step 3: create a PyHammockBlockRelation for each call site
-        pass
     
     def _ts_local_variables(self, block_id: str) -> List[str]:
         """
@@ -459,6 +467,7 @@ class SymbolTableBuilder:
                 )
                 local_variables = self._local_variables(n, script)
                 accessed_symbols = self._accessed_symbols(n, script)
+                parameters = self._callable_parameters(n, script)
                 callables[method_name] = (
                     PyCallable.builder()
                     .name(method_name)
@@ -473,7 +482,7 @@ class SymbolTableBuilder:
                     .call_sites(self._call_sites(n, script))
                     .local_variables(local_variables)
                     .cyclomatic_complexity(self._cyclomatic_complexity(n))
-                    .parameters(self._callable_parameters(n, script))
+                    .parameters(parameters)
                     .return_type(
                         ast.unparse(n.returns)
                         if n.returns
@@ -487,7 +496,8 @@ class SymbolTableBuilder:
                                                     script.path.__str__(),
                                                     local_variables=local_variables,
                                                     accessed_symbols=accessed_symbols,
-                                                    level="funcmeth"))
+                                                    level="funcmeth",
+                                                    func_parameters=parameters))
                     .build()
                 )
             for child in ast.iter_child_nodes(n):

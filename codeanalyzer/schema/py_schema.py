@@ -274,6 +274,7 @@ class PyHammockBlock(BaseModel):
     local_variables: List[PyVariableDeclaration] = []
     accessed_variables: List[PySymbol] = []
     class_attributes: List[PyVariableDeclaration] = []
+    func_parameters: List[PyCallableParameter] = []
     relations: List['PyHammockBlockRelation'] = []
 
 
@@ -283,11 +284,11 @@ class PyHammockBlockRelation(BaseModel):
     """Represents a Hammock block relation in Python code."""
     
     relation_type: str 
-    target_block_id: str 
-    target_block_full_qualifier: str 
+    related_block_id: str 
+    related_block_full_qualifier: str 
     functional_description: str 
-    target_block_type: str 
-    related_variables: List[PyCallableParameter] = []
+    related_block_type: str 
+    related_variables: PySymbol
 
 
 @builder
