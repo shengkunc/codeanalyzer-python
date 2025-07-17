@@ -108,7 +108,7 @@ class SymbolTableBuilder:
             elif isinstance(node, ast.FunctionDef):
                 functions.update(self._callables(node, script))
         variables = self._module_variables(module, script)
-        return (
+        py_module = (
             PyModule.builder()
             .file_path(str(py_file))
             .module_name(py_file.stem)
@@ -117,7 +117,7 @@ class SymbolTableBuilder:
             .variables(variables)
             .classes(classes)
             .functions(functions)
-            .hammock_block(self._hammock_decomposition(py_file.stem, 
+            .hammock_block(self._hb_decomposition(py_file.stem, 
                                             str(py_file), 
                                             local_variables=variables,
                                             accessed_symbols=[],
@@ -129,6 +129,8 @@ class SymbolTableBuilder:
             )
             .build()
         )
+        self._hb_data_relations(py_module)
+        return py_module
 
     def _imports(self, module: ast.Module) -> List[PyImport]:
         """
@@ -236,7 +238,7 @@ class SymbolTableBuilder:
                 }
             )
             .hammock_block(
-                self._hammock_decomposition(module_name + "." + class_node.name, 
+                self._hb_decomposition(module_name + "." + class_node.name, 
                                             str(script.path), 
                                             local_variables=attributes,
                                             accessed_symbols=[],
@@ -246,7 +248,7 @@ class SymbolTableBuilder:
 
         return {signature: py_class}
 
-    def _hammock_decomposition(self, full_qualifier: str, file_path: str,
+    def _hb_decomposition(self, full_qualifier: str, file_path: str,
                                local_variables, accessed_symbols, level) -> PyHammockBlock:
         """
         Gets the Hammock Block subtree root for a given full qualifier and file path.
@@ -391,6 +393,24 @@ class SymbolTableBuilder:
         collect_children(block_id)
         return subtree_blocks
     
+    def _hb_data_relations(self, py_module: PyModule) -> None:
+        if self.converted_hbt_map is None:
+            return
+        for hb in self.converted_hbt_map["hammock_blocks"]:
+            accessed_variables = hb.accessed_variables
+            for variable in accessed_variables:
+                # step 1: first search local block
+                # step 2: if not found, search sibiling block
+                # step 3: if still not found search parent block
+                # step 4: or alternatively search all blocks in the Hammock Block map
+                pass
+               
+    def _hb_call_relations(self, symbol_table: dict[Path, PyModule]) -> None:
+        # step 1: for each Hammock Block, find all call sites
+        # step 2: for each call site, find the targeted function/class definition
+        # step 3: create a PyHammockBlockRelation for each call site
+        pass
+    
     def _ts_local_variables(self, block_id: str) -> List[str]:
         """
         Returns a list of local variable names defined in the Hammock Block with the given ID.
@@ -463,7 +483,7 @@ class SymbolTableBuilder:
                     )
                     .comments(self._pycomments(n, code))
                     .hammock_block(
-                        self._hammock_decomposition(signature, 
+                        self._hb_decomposition(signature, 
                                                     script.path.__str__(),
                                                     local_variables=local_variables,
                                                     accessed_symbols=accessed_symbols,
@@ -1083,6 +1103,7 @@ class SymbolTableBuilder:
                     logger.error(f"Failed to process {py_file}: {e}")
                     raise e
                 progress.advance()
+            self._hb_call_relations(symbol_table)
             progress.finish("✅ Symbol table generation complete.")
 
         return symbol_table
