@@ -287,9 +287,11 @@ class PyHammockBlockRelation(BaseModel):
     relation_type: str 
     related_block_id: str 
     related_block_full_qualifier: str 
+    related_project_full_qualifier: str
     functional_description: str 
     related_block_type: str 
-    related_variables: PySymbol
+    related_variables: Optional[PySymbol] = None
+    related_call_site: Optional[PyCallsite] = None
 
 
 @builder

@@ -1,7 +1,7 @@
 from typing import Optional
 from codeanalyzer.hb_tree_sitter.hb_definition import TSHammockBlock
 from codeanalyzer.hb_tree_sitter.hbt_parser import PyHbtParser
-from codeanalyzer.schema.py_schema import PyHammockBlock, PyHammockBlockRelation, PySymbol
+from codeanalyzer.schema.py_schema import PyHammockBlock, PyHammockBlockRelation, PySymbol, PyCallsite
 
 class HammockBlockTreeBuilder:
     """
@@ -195,17 +195,42 @@ class HammockBlockTreeBuilder:
     @staticmethod
     def _build_data_relation_helper(src_block: PyHammockBlock, tgt_block: PyHammockBlock, variable: PySymbol) -> PyHammockBlockRelation:
         src_block_relation = (PyHammockBlockRelation.builder()
-                                            .relation_type("variable_declaration")
-                                            .related_block_id(tgt_block.block_id)
-                                            .related_block_full_qualifier(tgt_block.block_full_qualifier)
-                                            .related_block_type(tgt_block.block_type)
-                                            .related_variables(variable)
-                                            .build())
+                                .relation_type("variable_declaration")
+                                .related_block_id(tgt_block.block_id)
+                                .related_block_full_qualifier(tgt_block.block_full_qualifier)
+                                .related_project_full_qualifier(tgt_block.project_full_qualifier)
+                                .related_block_type(tgt_block.block_type)
+                                .related_variables(variable)
+                                .build())
         tgt_block_relation = (PyHammockBlockRelation.builder()
                                 .relation_type("variable_accessed")
                                 .related_block_id(src_block.block_id)
                                 .related_block_full_qualifier(src_block.block_full_qualifier)
+                                .related_project_full_qualifier(src_block.project_full_qualifier)
                                 .related_block_type(src_block.block_type)
                                 .related_variables(variable)
                                 .build())
         return src_block_relation, tgt_block_relation
+    
+    @ staticmethod
+    def build_caller_callee_relation(caller_block: PyHammockBlock, call_site: PyCallsite, callee_block: PyHammockBlock) -> None:
+        caller_block_relation = (PyHammockBlockRelation.builder()
+                                .relation_type("function_invocation_to_callee")
+                                .related_block_id(callee_block.block_id)
+                                .related_block_full_qualifier(callee_block.block_full_qualifier)
+                                .related_project_full_qualifier(callee_block.project_full_qualifier)
+                                .related_block_type(callee_block.block_type)
+                                .related_call_site(call_site)
+                                .build())
+        
+        callee_block_relation = (PyHammockBlockRelation.builder()
+                                .relation_type("function_invocation_from_caller")
+                                .related_block_id(caller_block.block_id)
+                                .related_block_full_qualifier(caller_block.block_full_qualifier)
+                                .related_project_full_qualifier(caller_block.project_full_qualifier)
+                                .related_block_type(caller_block.block_type)
+                                .related_call_site(call_site)
+                                .build())
+        
+        caller_block.relations.append(caller_block_relation)
+        callee_block.relations.append(callee_block_relation)

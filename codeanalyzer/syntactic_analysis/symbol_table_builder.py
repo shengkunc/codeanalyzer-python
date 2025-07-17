@@ -456,7 +456,11 @@ class SymbolTableBuilder:
                                 callee_block = sb
                                 break
                         if callee_block is None:
-                            #TODO create relations
+                            hbt.build_caller_callee_relation(
+                                block, 
+                                call_site,
+                                callee_block
+                            )
                             continue
                     
                     # case 2: if the callee_signature is not null and match the method name, but the 
@@ -470,7 +474,11 @@ class SymbolTableBuilder:
                                 callee_block = block
                                 break
                         if callee_block is None:
-                            #TODO create relations
+                            hbt.build_caller_callee_relation(
+                                block, 
+                                call_site,
+                                callee_block
+                            )
                             continue     
                     
                     # case 3:  if the callee_signature is not null and does not match the method name, but the
@@ -484,7 +492,11 @@ class SymbolTableBuilder:
                                 callee_block = block
                                 break
                         if callee_block is None:
-                            #TODO create relations
+                            hbt.build_caller_callee_relation(
+                                block, 
+                                call_site,
+                                callee_block
+                            )
                             continue
                     else:
                         logger.error(f"Unexpected call site: {call_site}, investigate")
