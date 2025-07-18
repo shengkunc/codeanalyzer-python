@@ -1,7 +1,9 @@
+import os
 from typing import Optional
 from codeanalyzer.hb_tree_sitter.hb_definition import TSHammockBlock
 from codeanalyzer.hb_tree_sitter.hbt_parser import PyHbtParser
-from codeanalyzer.schema.py_schema import PyHammockBlock, PyHammockBlockRelation, PySymbol, PyCallsite
+from codeanalyzer.schema.py_schema import PyHammockBlock, PyHammockBlockRelation, PySymbol, PyCallsite, PyModule, PyVariableDeclaration, PyCallableParameter, PyClassAttribute
+from pathlib import Path
 
 class HammockBlockTreeBuilder:
     """
@@ -90,30 +92,60 @@ class HammockBlockTreeBuilder:
                     continue
                 
                 # step 2: if not found, search sibling blocks
-                found_sibling_block = HammockBlockTreeBuilder._find_variables_in_sibling_blocks(variable, hb, converted_hbt_map)
+                found_sibling_block, declaration = HammockBlockTreeBuilder._find_variables_in_sibling_blocks(variable, hb, converted_hbt_map)
                 if found_sibling_block:
-                    src_block_relation, tgt_block_relation = HammockBlockTreeBuilder._build_data_relation_helper(hb, found_sibling_block, variable)
+                    src_block_relation, tgt_block_relation = HammockBlockTreeBuilder._build_data_relation_helper(hb, found_sibling_block, variable, declaration)
                     
-                    hb.relations.append(src_block_relation)
-                    found_sibling_block.relations.append(tgt_block_relation)
+                    hb_relations = hb.relations
+                    already_exist = False
+                    for relation in hb_relations:
+                        if relation.related_block_id == found_sibling_block.block_id and relation.related_variables[0].name == variable.name:
+                            already_exist = True
+                            break
+                    if not already_exist:
+                        # add relations only if not already exist
+                        hb.relations.append(src_block_relation)
+                        found_sibling_block.relations.append(tgt_block_relation)
+                    else:
+                        print(f"INFO: Relation already exists between {hb.block_id} and {found_sibling_block.block_id} for variable {variable.name}, skipping.")
                     continue
                 
                 # step 3: if still not found search parent block
-                found_parent_block = HammockBlockTreeBuilder._find_variables_in_parent_block(variable, hb, converted_hbt_map)
-                if found:
-                    src_block_relation, tgt_block_relation = HammockBlockTreeBuilder._build_data_relation_helper(hb, found_parent_block, variable)
+                found_parent_block, declaration = HammockBlockTreeBuilder._find_variables_in_parent_blocks(variable, hb, converted_hbt_map)
+                if found_parent_block:
+                    src_block_relation, tgt_block_relation = HammockBlockTreeBuilder._build_data_relation_helper(hb, found_parent_block, variable, declaration)
                     
-                    hb.relations.append(src_block_relation)
-                    found_parent_block.relations.append(tgt_block_relation)
+                    hb_relations = hb.relations
+                    already_exist = False
+                    for relation in hb_relations:
+                        if relation.related_block_id == found_parent_block.block_id and relation.related_variables[0].name == variable.name:
+                            already_exist = True
+                            break
+                    if not already_exist:
+                        # add relations only if not already exist
+                        hb.relations.append(src_block_relation)
+                        found_parent_block.relations.append(tgt_block_relation)
+                    else:
+                        print(f"INFO: Relation already exists between {hb.block_id} and {found_parent_block.block_id} for variable {variable.name}, skipping.")
                     continue
                 
                 # step 4: or alternatively search all blocks in the Hammock Block map
-                found_block = HammockBlockTreeBuilder._find_variables_in_all_blocks(variable, converted_hbt_map)
-                if found:
-                    src_block_relation, tgt_block_relation = HammockBlockTreeBuilder._build_data_relation_helper(hb, found_block, variable)
+                found_block, declaration = HammockBlockTreeBuilder._find_variables_in_all_blocks(variable, converted_hbt_map)
+                if found_block:
+                    src_block_relation, tgt_block_relation = HammockBlockTreeBuilder._build_data_relation_helper(hb, found_block, variable, declaration)
                     
-                    hb.relations.append(src_block_relation)
-                    found_parent_block.relations.append(tgt_block_relation)
+                    hb_relations = hb.relations
+                    already_exist = False
+                    for relation in hb_relations:
+                        if relation.related_block_id == found_block.block_id and relation.related_variables[0].name == variable.name:
+                            already_exist = True
+                            break
+                    if not already_exist:
+                        # add relations only if not already exist
+                        hb.relations.append(src_block_relation)
+                        found_block.relations.append(tgt_block_relation)
+                    else:
+                        print(f"INFO: Relation already exists between {hb.block_id} and {found_block.block_id} for variable {variable.name}, skipping.")
                     continue
 
     @staticmethod
@@ -134,7 +166,7 @@ class HammockBlockTreeBuilder:
     def _find_variables_in_sibling_blocks(variable, hb, converted_hbt_map) -> Optional[PyHammockBlock]:
         parent_id = hb.parent
         if parent_id is None:
-            return None
+            return None, None
         sibling_blocks = [
             block for block in converted_hbt_map["hammock_blocks"]
             if block.parent == parent_id and block.block_id != hb.block_id
@@ -143,37 +175,43 @@ class HammockBlockTreeBuilder:
             local_variables = sibling.local_variables
             for local_variable in local_variables:
                 if local_variable.name == variable.name:
-                    return sibling
+                    return sibling, local_variable
             class_attributes = sibling.class_attributes
             for class_attribute in class_attributes:
                 if class_attribute.name == variable.name:
-                    return sibling
-            func_parameters = sibling.func_parameters
-            for func_parameter in func_parameters:  
-                if func_parameter.name == variable.name:
-                    return sibling
-        return None
+                    return sibling, class_attribute
+            # # variable declared in sibling cannot be function parameters
+            # func_parameters = sibling.func_parameters
+            # for func_parameter in func_parameters:  
+            #     if func_parameter.name == variable.name:
+            #         return sibling
+        return None, None
     
     @staticmethod
-    def _find_variables_in_parent_block(variable, hb, converted_hbt_map) -> Optional[PyHammockBlock]:
-        parent_id = hb.parent
-        if parent_id is None:
-            return None
-        for block in converted_hbt_map["hammock_blocks"]:
-            if block.block_id == parent_id:
-                local_variables = block.local_variables
-                for local_variable in local_variables:
-                    if local_variable.name == variable.name:
-                        return block
-                class_attributes = block.class_attributes
-                for class_attribute in class_attributes:
-                    if class_attribute.name == variable.name:
-                        return block
-                func_parameters = block.func_parameters
-                for func_parameter in func_parameters:
-                    if func_parameter.name == variable.name:
-                        return block
-        return None
+    def _find_variables_in_parent_blocks(variable, hb, converted_hbt_map) -> Optional[PyHammockBlock]:
+        current_parent_id = hb.parent
+        if current_parent_id is None:
+            return None, None
+        all_parents = []
+        while current_parent_id is not None:
+            for block in converted_hbt_map["hammock_blocks"]:
+                if block.block_id == current_parent_id:
+                    all_parents.append(block)
+                    current_parent_id = block.parent
+        for block in all_parents:
+            local_variables = block.local_variables
+            for local_variable in local_variables:
+                if local_variable.name == variable.name:
+                    return block, local_variable
+            class_attributes = block.class_attributes
+            for class_attribute in class_attributes:
+                if class_attribute.name == variable.name:
+                    return block, class_attribute
+            func_parameters = block.func_parameters
+            for func_parameter in func_parameters:
+                if func_parameter.name == variable.name:
+                    return block, func_parameter
+        return None, None
     
     @staticmethod
     def _find_variables_in_all_blocks(variable, converted_hbt_map) -> Optional[PyHammockBlock]:
@@ -181,26 +219,26 @@ class HammockBlockTreeBuilder:
             local_variables = block.local_variables
             for local_variable in local_variables:
                 if local_variable.name == variable.name:
-                    return block
+                    return block, local_variable
             class_attributes = block.class_attributes
             for class_attribute in class_attributes:
                 if class_attribute.name == variable.name:
-                    return block
+                    return block, class_attribute
             func_parameters = block.func_parameters
             for func_parameter in func_parameters:
                 if func_parameter.name == variable.name:
-                    return block
-        return None
+                    return block, func_parameter
+        return None, None
 
     @staticmethod
-    def _build_data_relation_helper(src_block: PyHammockBlock, tgt_block: PyHammockBlock, variable: PySymbol) -> PyHammockBlockRelation:
+    def _build_data_relation_helper(src_block: PyHammockBlock, tgt_block: PyHammockBlock, variable: PySymbol, declaration: PyVariableDeclaration|PyCallableParameter|PyClassAttribute) -> PyHammockBlockRelation:
         src_block_relation = (PyHammockBlockRelation.builder()
                                 .relation_type("variable_declaration")
                                 .related_block_id(tgt_block.block_id)
                                 .related_block_full_qualifier(tgt_block.block_full_qualifier)
                                 .related_project_full_qualifier(tgt_block.project_full_qualifier)
                                 .related_block_type(tgt_block.block_type)
-                                .related_variables(variable)
+                                .related_variables((variable, declaration))
                                 .build())
         tgt_block_relation = (PyHammockBlockRelation.builder()
                                 .relation_type("variable_accessed")
@@ -208,12 +246,85 @@ class HammockBlockTreeBuilder:
                                 .related_block_full_qualifier(src_block.block_full_qualifier)
                                 .related_project_full_qualifier(src_block.project_full_qualifier)
                                 .related_block_type(src_block.block_type)
-                                .related_variables(variable)
+                                .related_variables((variable, declaration))
                                 .build())
         return src_block_relation, tgt_block_relation
     
+    @staticmethod
+    def build_caller_callee_relations(symbol_table: dict[Path, PyModule]):
+        # step 1: for each call site, find the targeted function/class definition
+        # step 2: create a PyHammockBlockRelation for each call site
+        for py_module in symbol_table.values():
+            module_hammock_blocks = py_module.module_hammock_blocks
+            for block in module_hammock_blocks:
+                call_sites = block.call_sites
+                for call_site in call_sites:
+                    callee_signature = call_site.callee_signature
+                    method_name = call_site.method_name
+                    callee_block = None
+                    
+                    # case 1: if the callee_signature is null it is a nested 
+                    # function part of the sibiling block
+                    if callee_signature is None:
+                        # find all sibling blocks
+                        sibling_blocks = [
+                            hb for hb in module_hammock_blocks
+                            if hb.block_id != block.block_id and hb.parent == block.parent
+                        ]
+                        for sb in sibling_blocks:
+                            if sb.block_type == "function_definition" and method_name == sb.block_full_qualifier.split(".")[-1]:
+                                callee_block = sb
+                                break
+                        if callee_block is None:
+                            HammockBlockTreeBuilder._build_caller_callee_relation_helper(
+                                block, 
+                                call_site,
+                                callee_block
+                            )
+                            continue
+                    
+                    # case 2: if the callee_signature is not null and match the method name, but the 
+                    # receiver type and expression are both null, module level function call
+                    elif callee_signature is not None and call_site.receiver_type is None and call_site.receiver_expr is None and method_name == callee_signature.split(".")[-1]:
+                        callee_path, _ = HammockBlockTreeBuilder._resolve_hb_callee_path(callee_signature, list(symbol_table.keys()))
+                        py_module = symbol_table.get(Path(callee_path))
+                        relevant_blocks = [hb for hb in py_module.module_hammock_blocks]
+                        for block in relevant_blocks:
+                            if len(block.project_full_qualifier) and block.project_full_qualifier == callee_signature: 
+                                callee_block = block
+                                break
+                        if callee_block is None:
+                            HammockBlockTreeBuilder._build_caller_callee_relation_helper(
+                                block, 
+                                call_site,
+                                callee_block
+                            )
+                            continue     
+                    
+                    # case 3:  if the callee_signature is not null and does not match the method name, but the
+                    # receiver type or receiver expression is not null, class level method call
+                    elif callee_signature is not None and (call_site.receiver_type is not None or call_site.receiver_expr is not None):
+                        real_callee_signature = callee_signature + "." + method_name
+                        callee_path, _ = HammockBlockTreeBuilder._resolve_hb_callee_path(real_callee_signature, list(symbol_table.keys()))
+                        relevant_blocks = [hb for hb in py_module.module_hammock_blocks]
+                        for block in relevant_blocks:
+                            if len(block.project_full_qualifier) and block.project_full_qualifier == real_callee_signature: 
+                                callee_block = block
+                                break
+                        if callee_block is None:
+                            HammockBlockTreeBuilder._build_caller_callee_relation_helper(
+                                block, 
+                                call_site,
+                                callee_block
+                            )
+                            continue
+                    else:
+                        print(f"WARN: Unexpected call site: {call_site}, investigate")
+                        continue     
+        return
+    
     @ staticmethod
-    def build_caller_callee_relation(caller_block: PyHammockBlock, call_site: PyCallsite, callee_block: PyHammockBlock) -> None:
+    def _build_caller_callee_relation_helper(caller_block: PyHammockBlock, call_site: PyCallsite, callee_block: PyHammockBlock) -> None:
         caller_block_relation = (PyHammockBlockRelation.builder()
                                 .relation_type("function_invocation_to_callee")
                                 .related_block_id(callee_block.block_id)
@@ -234,3 +345,30 @@ class HammockBlockTreeBuilder:
         
         caller_block.relations.append(caller_block_relation)
         callee_block.relations.append(callee_block_relation)
+    
+    @staticmethod
+    def _resolve_hb_callee_path(self, callee_signature: str, file_paths:str) -> str:
+        relative_paths = [file_path.replace(str(self.project_dir) + "/", "") for file_path in file_paths]
+        relative_modules = [os.path.splitext(path)[0].replace("/", ".") for path in relative_paths]
+        def longest_common_substring(src, target):
+            m = len(src)
+            n = len(target)
+            dp_table = [[0] * (n + 1) for _ in range(m + 1)]
+            res = 0
+            for i in range(1, m + 1):
+                for j in range(1, n + 1):
+                    if src[i - 1] == target[j - 1]:
+                        dp_table[i][j] = dp_table[i - 1][j - 1] + 1
+                        res = max(res, dp_table[i][j])
+                    else:
+                        dp_table[i][j] = 0
+            return res
+        idx = 0
+        global_max = 0
+        for idx, module in enumerate(relative_modules):
+            lcs = longest_common_substring(module, callee_signature)
+            if lcs > global_max:
+                global_max = lcs
+                callee_path = relative_paths[idx]
+                callee_module = module
+        return callee_path, callee_module

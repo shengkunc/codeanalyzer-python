@@ -22,7 +22,7 @@ for static analysis purposes.
 
 import inspect
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 import gzip
 
 from pydantic import BaseModel
@@ -259,6 +259,18 @@ class PyCallsite(BaseModel):
 
 @builder
 @msgpk
+class PyClassAttribute(BaseModel):
+    """Represents a Python class attribute."""
+
+    name: str
+    type: Optional[str] = None
+    comments: List[PyComment] = []
+    start_line: int = -1
+    end_line: int = -1
+    
+
+@builder
+@msgpk
 class PyHammockBlock(BaseModel):
     """Represents a Hammock block in Python code."""
     
@@ -285,12 +297,11 @@ class PyHammockBlockRelation(BaseModel):
     """Represents a Hammock block relation in Python code."""
     
     relation_type: str 
-    related_block_id: str 
+    related_block_id: int 
     related_block_full_qualifier: str 
     related_project_full_qualifier: str
-    functional_description: str 
     related_block_type: str 
-    related_variables: Optional[PySymbol] = None
+    related_variables: Optional[Tuple[PySymbol, Optional[PyVariableDeclaration | PyCallableParameter | PyClassAttribute]]] = None
     related_call_site: Optional[PyCallsite] = None
 
 
@@ -319,18 +330,6 @@ class PyCallable(BaseModel):
     def __hash__(self) -> int:
         """Generate a hash based on the callable's signature."""
         return hash(self.signature)
-
-
-@builder
-@msgpk
-class PyClassAttribute(BaseModel):
-    """Represents a Python class attribute."""
-
-    name: str
-    type: Optional[str] = None
-    comments: List[PyComment] = []
-    start_line: int = -1
-    end_line: int = -1
 
 
 @builder
