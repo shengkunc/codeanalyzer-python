@@ -233,7 +233,7 @@ class HammockBlockTreeBuilder:
     @staticmethod
     def _build_data_relation_helper(src_block: PyHammockBlock, tgt_block: PyHammockBlock, variable: PySymbol, declaration: PyVariableDeclaration|PyCallableParameter|PyClassAttribute) -> PyHammockBlockRelation:
         src_block_relation = (PyHammockBlockRelation.builder()
-                                .relation_type("variable_declaration")
+                                .relation_type("data_relation: variable_declaration")
                                 .related_block_id(tgt_block.block_id)
                                 .related_block_full_qualifier(tgt_block.block_full_qualifier)
                                 .related_project_full_qualifier(tgt_block.project_full_qualifier)
@@ -241,7 +241,7 @@ class HammockBlockTreeBuilder:
                                 .related_variables((variable, declaration))
                                 .build())
         tgt_block_relation = (PyHammockBlockRelation.builder()
-                                .relation_type("variable_accessed")
+                                .relation_type("data_relation: variable_accessed")
                                 .related_block_id(src_block.block_id)
                                 .related_block_full_qualifier(src_block.block_full_qualifier)
                                 .related_project_full_qualifier(src_block.project_full_qualifier)
@@ -251,7 +251,7 @@ class HammockBlockTreeBuilder:
         return src_block_relation, tgt_block_relation
     
     @staticmethod
-    def build_caller_callee_relations(symbol_table: dict[Path, PyModule]):
+    def build_caller_callee_relations(symbol_table: dict[Path, PyModule], project_dir: str):
         # step 1: for each call site, find the targeted function/class definition
         # step 2: create a PyHammockBlockRelation for each call site
         for py_module in symbol_table.values():
@@ -275,7 +275,7 @@ class HammockBlockTreeBuilder:
                             if sb.block_type == "function_definition" and method_name == sb.block_full_qualifier.split(".")[-1]:
                                 callee_block = sb
                                 break
-                        if callee_block is None:
+                        if callee_block is not None:
                             HammockBlockTreeBuilder._build_caller_callee_relation_helper(
                                 block, 
                                 call_site,
@@ -286,14 +286,14 @@ class HammockBlockTreeBuilder:
                     # case 2: if the callee_signature is not null and match the method name, but the 
                     # receiver type and expression are both null, module level function call
                     elif callee_signature is not None and call_site.receiver_type is None and call_site.receiver_expr is None and method_name == callee_signature.split(".")[-1]:
-                        callee_path, _ = HammockBlockTreeBuilder._resolve_hb_callee_path(callee_signature, list(symbol_table.keys()))
-                        py_module = symbol_table.get(Path(callee_path))
-                        relevant_blocks = [hb for hb in py_module.module_hammock_blocks]
-                        for block in relevant_blocks:
-                            if len(block.project_full_qualifier) and block.project_full_qualifier == callee_signature: 
-                                callee_block = block
+                        callee_path, _ = HammockBlockTreeBuilder._resolve_hb_callee_path(callee_signature, list(symbol_table.keys()), project_dir)
+                        callee_py_module = symbol_table.get(callee_path)
+                        relevant_blocks = [hb for hb in callee_py_module.module_hammock_blocks]
+                        for temp_block in relevant_blocks:
+                            if len(temp_block.project_full_qualifier) and temp_block.project_full_qualifier == callee_signature: 
+                                callee_block = temp_block
                                 break
-                        if callee_block is None:
+                        if callee_block is not None:
                             HammockBlockTreeBuilder._build_caller_callee_relation_helper(
                                 block, 
                                 call_site,
@@ -305,13 +305,14 @@ class HammockBlockTreeBuilder:
                     # receiver type or receiver expression is not null, class level method call
                     elif callee_signature is not None and (call_site.receiver_type is not None or call_site.receiver_expr is not None):
                         real_callee_signature = callee_signature + "." + method_name
-                        callee_path, _ = HammockBlockTreeBuilder._resolve_hb_callee_path(real_callee_signature, list(symbol_table.keys()))
-                        relevant_blocks = [hb for hb in py_module.module_hammock_blocks]
-                        for block in relevant_blocks:
-                            if len(block.project_full_qualifier) and block.project_full_qualifier == real_callee_signature: 
-                                callee_block = block
+                        callee_path, _ = HammockBlockTreeBuilder._resolve_hb_callee_path(real_callee_signature, list(symbol_table.keys()), project_dir)
+                        callee_py_module = symbol_table.get(callee_path)
+                        relevant_blocks = [hb for hb in callee_py_module.module_hammock_blocks]
+                        for temp_block in relevant_blocks:
+                            if len(temp_block.project_full_qualifier) and temp_block.project_full_qualifier == real_callee_signature: 
+                                callee_block = temp_block
                                 break
-                        if callee_block is None:
+                        if callee_block is not None:
                             HammockBlockTreeBuilder._build_caller_callee_relation_helper(
                                 block, 
                                 call_site,
@@ -326,7 +327,7 @@ class HammockBlockTreeBuilder:
     @ staticmethod
     def _build_caller_callee_relation_helper(caller_block: PyHammockBlock, call_site: PyCallsite, callee_block: PyHammockBlock) -> None:
         caller_block_relation = (PyHammockBlockRelation.builder()
-                                .relation_type("function_invocation_to_callee")
+                                .relation_type("caller_callee_relation: function_invocation_to_callee")
                                 .related_block_id(callee_block.block_id)
                                 .related_block_full_qualifier(callee_block.block_full_qualifier)
                                 .related_project_full_qualifier(callee_block.project_full_qualifier)
@@ -335,7 +336,7 @@ class HammockBlockTreeBuilder:
                                 .build())
         
         callee_block_relation = (PyHammockBlockRelation.builder()
-                                .relation_type("function_invocation_from_caller")
+                                .relation_type("caller_callee_relation: function_invocation_from_caller")
                                 .related_block_id(caller_block.block_id)
                                 .related_block_full_qualifier(caller_block.block_full_qualifier)
                                 .related_project_full_qualifier(caller_block.project_full_qualifier)
@@ -347,8 +348,8 @@ class HammockBlockTreeBuilder:
         callee_block.relations.append(callee_block_relation)
     
     @staticmethod
-    def _resolve_hb_callee_path(self, callee_signature: str, file_paths:str) -> str:
-        relative_paths = [file_path.replace(str(self.project_dir) + "/", "") for file_path in file_paths]
+    def _resolve_hb_callee_path(callee_signature: str, file_paths: str, project_dir: str) -> str:
+        relative_paths = [file_path.replace(str(project_dir) + "/", "") for file_path in file_paths]
         relative_modules = [os.path.splitext(path)[0].replace("/", ".") for path in relative_paths]
         def longest_common_substring(src, target):
             m = len(src)
@@ -369,6 +370,6 @@ class HammockBlockTreeBuilder:
             lcs = longest_common_substring(module, callee_signature)
             if lcs > global_max:
                 global_max = lcs
-                callee_path = relative_paths[idx]
+                rel_callee_path = relative_paths[idx]
                 callee_module = module
-        return callee_path, callee_module
+        return os.path.join(project_dir, rel_callee_path), callee_module

@@ -432,8 +432,7 @@ class SymbolTableBuilder:
         hbt.build_hb_data_relations(self.converted_hbt_map)
                
     def _hb_call_relations(self, symbol_table: dict[Path, PyModule]):
-        return
-        hbt.build_caller_callee_relations(symbol_table)
+        hbt.build_caller_callee_relations(symbol_table, str(self.project_dir))
     
     def _ts_local_variables(self, block_id: str) -> List[str]:
         """
