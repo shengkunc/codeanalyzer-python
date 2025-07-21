@@ -235,7 +235,7 @@ class SymbolTableBuilder:
                     k: v
                     for child in class_node.body
                     if isinstance(child, ast.ClassDef)
-                    for k, v in self._add_class(child, script).items()
+                    for k, v in self._add_class(child, script, module_name + "." + class_node.name).items()
                 }
             )
             .hammock_block(
@@ -291,6 +291,7 @@ class SymbolTableBuilder:
                             break
                     if not already_exists:
                         current_placement.local_variables.append(variable)
+            
             elif level == "class":
                 children_hbs = self._hb_subtree_blocks_recursive(hb_identified.block_id)                
                 # only plain expression statements are eligible for module level variables
@@ -314,6 +315,7 @@ class SymbolTableBuilder:
                             break
                     if not already_exists:
                         current_placement.class_attributes.append(variable)
+            
             elif level == "funcmeth":
                 eligible_hbs = self._hb_subtree_blocks_recursive(hb_identified.block_id)
                 # process function parameters
@@ -337,7 +339,7 @@ class SymbolTableBuilder:
                     end_line = variable.end_line
                     scope = variable.scope
                     current_placement = hb_identified
-                    assert scope == "local" or scope == "function"
+                    # assert scope == "local" or scope == "function"
                     for eligible_hb in eligible_hbs: 
                         if start_line >= eligible_hb.start_line and end_line <= eligible_hb.end_line:
                             if (eligible_hb.start_line > current_placement.start_line or eligible_hb.end_line < current_placement.end_line):
@@ -345,12 +347,20 @@ class SymbolTableBuilder:
                                     print(f"Warning: Variable {name} not found in original ts hammock block {eligible_hb.block_id}")
                                 current_placement = eligible_hb
                     already_exists = False
-                    for existing_variable in current_placement.local_variables:
-                        if existing_variable.name == name and existing_variable.start_line == start_line and existing_variable.end_line == end_line:
-                            already_exists = True
-                            break
-                    if not already_exists:
-                        current_placement.local_variables.append(variable)
+                    if scope == "local" or scope == "function":
+                        for existing_variable in current_placement.local_variables:
+                            if existing_variable.name == name and existing_variable.start_line == start_line and existing_variable.end_line == end_line:
+                                already_exists = True
+                                break
+                        if not already_exists:
+                            current_placement.local_variables.append(variable)
+                    elif scope == "class":
+                        for existing_variable in current_placement.class_attributes:
+                            if existing_variable.name == name and existing_variable.start_line == start_line and existing_variable.end_line == end_line:
+                                already_exists = True
+                                break
+                        if not already_exists:
+                            current_placement.class_attributes.append(variable)
                 
                 # process accessed symbols
                 for symbols in accessed_symbols:
@@ -389,6 +399,7 @@ class SymbolTableBuilder:
                             break
                     if not already_exists:
                         current_placement.call_sites.append(call_site)
+            
             else:
                 raise RuntimeError(f"Unknown Hammock Block level: {level}")           
             return hb_identified
