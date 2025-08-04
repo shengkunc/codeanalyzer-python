@@ -19,7 +19,7 @@ class PyHbtParser:
         self.project_base = project_base
         
         # Import the parsing rules based on the mode
-        if self.parsing_mode not in ["rule-based", "default"]:
+        if self.parsing_mode not in ["rule-based", "simple"]:
             raise ValueError(f"Unsupported parsing mode: {self.parsing_mode}")
         
         py_language = Language(tspython.language())
@@ -28,7 +28,7 @@ class PyHbtParser:
             filename: os.path.dirname(filename),
             "project_base": project_base
         }
-        if self.parsing_mode != "default":
+        if self.parsing_mode != "simple":
             self.parsing_rules = hbt_python_rules.PythonTSHBParsingRules(source_code_dir_list, self.src_file_to_dir_map, cg_backend=hbt_configs.PY_CG_BACKEND)
         
         # Parse the source code files to create the tree-sitter trees from source files
@@ -97,8 +97,8 @@ class PyHbtParser:
         return pdg
 
     def _construct_hammock_block_from_ts_node(self, node: Node, source_file: str) -> Optional[TSHammockBlock]:
-        # Process using default parsing rules and logics.
-        if self.parsing_mode == "default":
+        # Process using simple parsing rules and logics.
+        if self.parsing_mode == "simple":
             block_id = node.id 
             block_type = node.type
             start_point = node.start_point
@@ -109,11 +109,11 @@ class PyHbtParser:
                 parent = self.block_map[node.parent.id] if node.parent else None
             except KeyError:
                 # node has parent but parent is not in the block_map, this means that the parent is merged with its parent already, skip processing this block. 
-                # note that this only works with default parsing mode because the skipped blocks are leaves in the tree-sitter tree
+                # note that this only works with simple parsing mode because the skipped blocks are leaves in the tree-sitter tree
                 print(f"Parent block {node.parent.id} not found in block_map. Skipping this block of type {node.type}, with start point: {start_point}, end point: {end_point}.")
                 return None, []
 
-            # default mode can only process comments, strings, and identifiers, and add them to parent blocks, we cannot process local variables as that requires inclusion/exclusion rules
+            # simple mode can only process comments, strings, and identifiers, and add them to parent blocks, we cannot process local variables as that requires inclusion/exclusion rules
             
             if block_type == "comment":
                 comment = node.text.decode("utf-8")
@@ -177,7 +177,7 @@ class PyHbtParser:
             return hammock_block, additional_blocks_list
  
     def _construct_children_from_hammock_blocks(self, hammock_blocks: List[TSHammockBlock]):
-        if self.parsing_mode == "default":
+        if self.parsing_mode == "simple":
             # Establish the children relationships
             for hammock_block in hammock_blocks:
                 for child_id in hammock_block.children_ids:

@@ -28,7 +28,7 @@ from codeanalyzer.utils import logger
 from codeanalyzer.utils.progress_bar import ProgressBar
 
 from codeanalyzer.hb_tree_sitter.hbt_interface import HammockBlockTreeBuilder as hbt
-from codeanalyzer.hb_tree_sitter.hb_definition import TSHammockBlock, TSHBRelation
+from codeanalyzer.hb_tree_sitter.hb_definition import TSHammockBlock
 
 
 class SymbolTableBuilder:
