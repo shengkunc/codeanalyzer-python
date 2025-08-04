@@ -1,0 +1,3580 @@
+{
+    "symbol_table": {
+        "/root/Workspace/python-examples/simple_repo/src/__init__.py": {
+            "file_path": "/root/Workspace/python-examples/simple_repo/src/__init__.py",
+            "module_name": "__init__",
+            "imports": [],
+            "comments": [],
+            "classes": {},
+            "functions": {},
+            "variables": [],
+            "hammock_block": null,
+            "module_hammock_blocks": []
+        },
+        "/root/Workspace/python-examples/simple_repo/src/main.py": {
+            "file_path": "/root/Workspace/python-examples/simple_repo/src/main.py",
+            "module_name": "main",
+            "imports": [
+                {
+                    "module": "src.sub_folder1.module2",
+                    "name": "Module2",
+                    "alias": null,
+                    "start_line": 1,
+                    "end_line": 1,
+                    "start_column": 0,
+                    "end_column": 43
+                },
+                {
+                    "module": "src.sub_folder1.module1",
+                    "name": "Module1",
+                    "alias": null,
+                    "start_line": 2,
+                    "end_line": 2,
+                    "start_column": 0,
+                    "end_column": 43
+                },
+                {
+                    "module": "src.sub_folder1.module3",
+                    "name": "add",
+                    "alias": null,
+                    "start_line": 3,
+                    "end_line": 3,
+                    "start_column": 0,
+                    "end_column": 39
+                }
+            ],
+            "comments": [],
+            "classes": {},
+            "functions": {
+                "submain": {
+                    "name": "submain",
+                    "path": "/root/Workspace/python-examples/simple_repo/src/main.py",
+                    "signature": "main.submain",
+                    "comments": [],
+                    "decorators": [],
+                    "parameters": [],
+                    "return_type": null,
+                    "code": "def submain():\n    a += 1\n    b += 2\n    return (a, b)",
+                    "start_line": 8,
+                    "end_line": 11,
+                    "code_start_line": 9,
+                    "accessed_symbols": [
+                        {
+                            "name": "a",
+                            "scope": "local",
+                            "kind": "variable",
+                            "type": "int",
+                            "qualified_name": "builtins.int",
+                            "is_builtin": false,
+                            "lineno": 11,
+                            "col_offset": 11
+                        },
+                        {
+                            "name": "b",
+                            "scope": "local",
+                            "kind": "variable",
+                            "type": "int",
+                            "qualified_name": "builtins.int",
+                            "is_builtin": false,
+                            "lineno": 11,
+                            "col_offset": 14
+                        }
+                    ],
+                    "call_sites": [],
+                    "local_variables": [],
+                    "cyclomatic_complexity": 2,
+                    "hammock_block": {
+                        "block_id": 139666835216240,
+                        "block_full_qualifier": "main.submain",
+                        "project_full_qualifier": "src.main.submain",
+                        "block_type": "function_definition",
+                        "start_line": 8,
+                        "end_line": 11,
+                        "meta_data": {
+                            "source_file": "/root/Workspace/python-examples/simple_repo/src/main.py"
+                        },
+                        "children": [
+                            139666835793424
+                        ],
+                        "parent": 139666835139440,
+                        "call_sites": [],
+                        "local_variables": [],
+                        "accessed_variables": [
+                            {
+                                "name": "a",
+                                "scope": "local",
+                                "kind": "variable",
+                                "type": "int",
+                                "qualified_name": "builtins.int",
+                                "is_builtin": false,
+                                "lineno": 11,
+                                "col_offset": 11
+                            },
+                            {
+                                "name": "b",
+                                "scope": "local",
+                                "kind": "variable",
+                                "type": "int",
+                                "qualified_name": "builtins.int",
+                                "is_builtin": false,
+                                "lineno": 11,
+                                "col_offset": 14
+                            }
+                        ],
+                        "class_attributes": [],
+                        "func_parameters": [],
+                        "relations": [
+                            {
+                                "relation_type": "data_relation: variable_declaration",
+                                "related_block_id": 139666835791792,
+                                "related_block_full_qualifier": "",
+                                "related_project_full_qualifier": "",
+                                "related_block_type": "expression_statement",
+                                "related_variables": [
+                                    {
+                                        "name": "a",
+                                        "scope": "local",
+                                        "kind": "variable",
+                                        "type": "int",
+                                        "qualified_name": "builtins.int",
+                                        "is_builtin": false,
+                                        "lineno": 11,
+                                        "col_offset": 11
+                                    },
+                                    {
+                                        "name": "a",
+                                        "type": "int",
+                                        "initializer": "0",
+                                        "value": null,
+                                        "scope": "module",
+                                        "start_line": 5,
+                                        "end_line": 5,
+                                        "start_column": 0,
+                                        "end_column": 1
+                                    }
+                                ],
+                                "related_call_site": null
+                            },
+                            {
+                                "relation_type": "data_relation: variable_declaration",
+                                "related_block_id": 139666835791792,
+                                "related_block_full_qualifier": "",
+                                "related_project_full_qualifier": "",
+                                "related_block_type": "expression_statement",
+                                "related_variables": [
+                                    {
+                                        "name": "b",
+                                        "scope": "local",
+                                        "kind": "variable",
+                                        "type": "int",
+                                        "qualified_name": "builtins.int",
+                                        "is_builtin": false,
+                                        "lineno": 11,
+                                        "col_offset": 14
+                                    },
+                                    {
+                                        "name": "b",
+                                        "type": "int",
+                                        "initializer": "a + 1",
+                                        "value": null,
+                                        "scope": "module",
+                                        "start_line": 6,
+                                        "end_line": 6,
+                                        "start_column": 0,
+                                        "end_column": 1
+                                    }
+                                ],
+                                "related_call_site": null
+                            },
+                            {
+                                "relation_type": "caller_callee_relation: function_invocation_from_caller",
+                                "related_block_id": 139666835796400,
+                                "related_block_full_qualifier": "",
+                                "related_project_full_qualifier": "",
+                                "related_block_type": "expression_statement",
+                                "related_variables": null,
+                                "related_call_site": {
+                                    "method_name": "submain",
+                                    "receiver_expr": null,
+                                    "receiver_type": null,
+                                    "argument_types": [],
+                                    "return_type": "submain",
+                                    "callee_signature": "src.main.submain",
+                                    "is_constructor_call": false,
+                                    "start_line": 18,
+                                    "start_column": 4,
+                                    "end_line": 18,
+                                    "end_column": 13
+                                }
+                            }
+                        ]
+                    }
+                },
+                "main": {
+                    "name": "main",
+                    "path": "/root/Workspace/python-examples/simple_repo/src/main.py",
+                    "signature": "main.main",
+                    "comments": [],
+                    "decorators": [],
+                    "parameters": [
+                        {
+                            "name": "arg1",
+                            "type": "int",
+                            "default_value": null,
+                            "start_line": 13,
+                            "end_line": 13,
+                            "start_column": 9,
+                            "end_column": 13
+                        },
+                        {
+                            "name": "arg2",
+                            "type": "int",
+                            "default_value": null,
+                            "start_line": 13,
+                            "end_line": 13,
+                            "start_column": 15,
+                            "end_column": 19
+                        }
+                    ],
+                    "return_type": null,
+                    "code": "def main(arg1, arg2):\n    module1 = Module1()\n    module2 = Module2()\n    c = add(6, 7) + module1.add(a, b)\n    d = module2.minus(arg1, arg2)\n    submain()\n    print(a, b, c, d)",
+                    "start_line": 13,
+                    "end_line": 19,
+                    "code_start_line": 14,
+                    "accessed_symbols": [
+                        {
+                            "name": "Module1",
+                            "scope": "local",
+                            "kind": "class",
+                            "type": "Module1",
+                            "qualified_name": "src.sub_folder1.module1.Module1",
+                            "is_builtin": false,
+                            "lineno": 14,
+                            "col_offset": 14
+                        },
+                        {
+                            "name": "Module2",
+                            "scope": "local",
+                            "kind": "class",
+                            "type": "Module2",
+                            "qualified_name": "src.sub_folder1.module2.Module2",
+                            "is_builtin": false,
+                            "lineno": 15,
+                            "col_offset": 14
+                        },
+                        {
+                            "name": "arg1",
+                            "scope": "local",
+                            "kind": "variable",
+                            "type": "int",
+                            "qualified_name": "builtins.int",
+                            "is_builtin": false,
+                            "lineno": 17,
+                            "col_offset": 22
+                        },
+                        {
+                            "name": "arg2",
+                            "scope": "local",
+                            "kind": "variable",
+                            "type": "int",
+                            "qualified_name": "builtins.int",
+                            "is_builtin": false,
+                            "lineno": 17,
+                            "col_offset": 28
+                        },
+                        {
+                            "name": "submain",
+                            "scope": "local",
+                            "kind": "function",
+                            "type": "submain",
+                            "qualified_name": "src.main.submain",
+                            "is_builtin": false,
+                            "lineno": 18,
+                            "col_offset": 4
+                        },
+                        {
+                            "name": "print",
+                            "scope": "local",
+                            "kind": "function",
+                            "type": "print",
+                            "qualified_name": "builtins.print",
+                            "is_builtin": false,
+                            "lineno": 19,
+                            "col_offset": 4
+                        },
+                        {
+                            "name": "a",
+                            "scope": "local",
+                            "kind": "variable",
+                            "type": "int",
+                            "qualified_name": "builtins.int",
+                            "is_builtin": false,
+                            "lineno": 19,
+                            "col_offset": 10
+                        },
+                        {
+                            "name": "b",
+                            "scope": "local",
+                            "kind": "variable",
+                            "type": "int",
+                            "qualified_name": "builtins.int",
+                            "is_builtin": false,
+                            "lineno": 19,
+                            "col_offset": 13
+                        },
+                        {
+                            "name": "c",
+                            "scope": "local",
+                            "kind": "variable",
+                            "type": "int",
+                            "qualified_name": "builtins.int",
+                            "is_builtin": false,
+                            "lineno": 19,
+                            "col_offset": 16
+                        },
+                        {
+                            "name": "d",
+                            "scope": "local",
+                            "kind": "variable",
+                            "type": "int",
+                            "qualified_name": "builtins.int",
+                            "is_builtin": false,
+                            "lineno": 19,
+                            "col_offset": 19
+                        },
+                        {
+                            "name": "add",
+                            "scope": "local",
+                            "kind": "function",
+                            "type": "add",
+                            "qualified_name": "src.sub_folder1.module3.add",
+                            "is_builtin": false,
+                            "lineno": 16,
+                            "col_offset": 8
+                        },
+                        {
+                            "name": "a",
+                            "scope": "local",
+                            "kind": "variable",
+                            "type": "int",
+                            "qualified_name": "builtins.int",
+                            "is_builtin": false,
+                            "lineno": 16,
+                            "col_offset": 32
+                        },
+                        {
+                            "name": "b",
+                            "scope": "local",
+                            "kind": "variable",
+                            "type": "int",
+                            "qualified_name": "builtins.int",
+                            "is_builtin": false,
+                            "lineno": 16,
+                            "col_offset": 35
+                        },
+                        {
+                            "name": "module2",
+                            "scope": "local",
+                            "kind": "variable",
+                            "type": "Module2",
+                            "qualified_name": "src.sub_folder1.module2.Module2",
+                            "is_builtin": false,
+                            "lineno": 17,
+                            "col_offset": 8
+                        },
+                        {
+                            "name": "module1",
+                            "scope": "local",
+                            "kind": "variable",
+                            "type": "Module1",
+                            "qualified_name": "src.sub_folder1.module1.Module1",
+                            "is_builtin": false,
+                            "lineno": 16,
+                            "col_offset": 20
+                        }
+                    ],
+                    "call_sites": [
+                        {
+                            "method_name": "Module1",
+                            "receiver_expr": null,
+                            "receiver_type": null,
+                            "argument_types": [],
+                            "return_type": "Module1",
+                            "callee_signature": "src.sub_folder1.module1.Module1",
+                            "is_constructor_call": false,
+                            "start_line": 14,
+                            "start_column": 14,
+                            "end_line": 14,
+                            "end_column": 23
+                        },
+                        {
+                            "method_name": "Module2",
+                            "receiver_expr": null,
+                            "receiver_type": null,
+                            "argument_types": [],
+                            "return_type": "Module2",
+                            "callee_signature": "src.sub_folder1.module2.Module2",
+                            "is_constructor_call": false,
+                            "start_line": 15,
+                            "start_column": 14,
+                            "end_line": 15,
+                            "end_column": 23
+                        },
+                        {
+                            "method_name": "minus",
+                            "receiver_expr": "module2",
+                            "receiver_type": "Module2",
+                            "argument_types": [
+                                "int",
+                                "int"
+                            ],
+                            "return_type": "Module2",
+                            "callee_signature": "src.sub_folder1.module2.Module2",
+                            "is_constructor_call": false,
+                            "start_line": 17,
+                            "start_column": 8,
+                            "end_line": 17,
+                            "end_column": 33
+                        },
+                        {
+                            "method_name": "submain",
+                            "receiver_expr": null,
+                            "receiver_type": null,
+                            "argument_types": [],
+                            "return_type": "submain",
+                            "callee_signature": "src.main.submain",
+                            "is_constructor_call": false,
+                            "start_line": 18,
+                            "start_column": 4,
+                            "end_line": 18,
+                            "end_column": 13
+                        },
+                        {
+                            "method_name": "print",
+                            "receiver_expr": null,
+                            "receiver_type": null,
+                            "argument_types": [
+                                "int",
+                                "int",
+                                "int",
+                                "int"
+                            ],
+                            "return_type": "print",
+                            "callee_signature": "builtins.print",
+                            "is_constructor_call": false,
+                            "start_line": 19,
+                            "start_column": 4,
+                            "end_line": 19,
+                            "end_column": 21
+                        },
+                        {
+                            "method_name": "add",
+                            "receiver_expr": null,
+                            "receiver_type": null,
+                            "argument_types": [
+                                "int",
+                                "int"
+                            ],
+                            "return_type": "add",
+                            "callee_signature": "src.sub_folder1.module3.add",
+                            "is_constructor_call": false,
+                            "start_line": 16,
+                            "start_column": 8,
+                            "end_line": 16,
+                            "end_column": 17
+                        },
+                        {
+                            "method_name": "add",
+                            "receiver_expr": "module1",
+                            "receiver_type": "Module1",
+                            "argument_types": [
+                                "int",
+                                "int"
+                            ],
+                            "return_type": "Module1",
+                            "callee_signature": "src.sub_folder1.module1.Module1",
+                            "is_constructor_call": false,
+                            "start_line": 16,
+                            "start_column": 20,
+                            "end_line": 16,
+                            "end_column": 37
+                        }
+                    ],
+                    "local_variables": [
+                        {
+                            "name": "module1",
+                            "type": "Module1",
+                            "initializer": "Module1()",
+                            "value": null,
+                            "scope": "function",
+                            "start_line": 14,
+                            "end_line": 14,
+                            "start_column": 4,
+                            "end_column": 11
+                        },
+                        {
+                            "name": "module2",
+                            "type": "Module2",
+                            "initializer": "Module2()",
+                            "value": null,
+                            "scope": "function",
+                            "start_line": 15,
+                            "end_line": 15,
+                            "start_column": 4,
+                            "end_column": 11
+                        },
+                        {
+                            "name": "c",
+                            "type": "int",
+                            "initializer": "add(6, 7) + module1.add(a, b)",
+                            "value": null,
+                            "scope": "function",
+                            "start_line": 16,
+                            "end_line": 16,
+                            "start_column": 4,
+                            "end_column": 5
+                        },
+                        {
+                            "name": "d",
+                            "type": "int",
+                            "initializer": "module2.minus(arg1, arg2)",
+                            "value": null,
+                            "scope": "function",
+                            "start_line": 17,
+                            "end_line": 17,
+                            "start_column": 4,
+                            "end_column": 5
+                        }
+                    ],
+                    "cyclomatic_complexity": 1,
+                    "hammock_block": {
+                        "block_id": 139666835216248,
+                        "block_full_qualifier": "main.main",
+                        "project_full_qualifier": "src.main.main",
+                        "block_type": "function_definition",
+                        "start_line": 13,
+                        "end_line": 19,
+                        "meta_data": {
+                            "source_file": "/root/Workspace/python-examples/simple_repo/src/main.py"
+                        },
+                        "children": [
+                            139666835796400
+                        ],
+                        "parent": 139666835139440,
+                        "call_sites": [],
+                        "local_variables": [],
+                        "accessed_variables": [],
+                        "class_attributes": [],
+                        "func_parameters": [
+                            {
+                                "name": "arg1",
+                                "type": "int",
+                                "default_value": null,
+                                "start_line": 13,
+                                "end_line": 13,
+                                "start_column": 9,
+                                "end_column": 13
+                            },
+                            {
+                                "name": "arg2",
+                                "type": "int",
+                                "default_value": null,
+                                "start_line": 13,
+                                "end_line": 13,
+                                "start_column": 15,
+                                "end_column": 19
+                            }
+                        ],
+                        "relations": [
+                            {
+                                "relation_type": "data_relation: variable_accessed",
+                                "related_block_id": 139666835796400,
+                                "related_block_full_qualifier": "",
+                                "related_project_full_qualifier": "",
+                                "related_block_type": "expression_statement",
+                                "related_variables": [
+                                    {
+                                        "name": "arg1",
+                                        "scope": "local",
+                                        "kind": "variable",
+                                        "type": "int",
+                                        "qualified_name": "builtins.int",
+                                        "is_builtin": false,
+                                        "lineno": 17,
+                                        "col_offset": 22
+                                    },
+                                    {
+                                        "name": "arg1",
+                                        "type": "int",
+                                        "default_value": null,
+                                        "start_line": 13,
+                                        "end_line": 13,
+                                        "start_column": 9,
+                                        "end_column": 13
+                                    }
+                                ],
+                                "related_call_site": null
+                            },
+                            {
+                                "relation_type": "data_relation: variable_accessed",
+                                "related_block_id": 139666835796400,
+                                "related_block_full_qualifier": "",
+                                "related_project_full_qualifier": "",
+                                "related_block_type": "expression_statement",
+                                "related_variables": [
+                                    {
+                                        "name": "arg2",
+                                        "scope": "local",
+                                        "kind": "variable",
+                                        "type": "int",
+                                        "qualified_name": "builtins.int",
+                                        "is_builtin": false,
+                                        "lineno": 17,
+                                        "col_offset": 28
+                                    },
+                                    {
+                                        "name": "arg2",
+                                        "type": "int",
+                                        "default_value": null,
+                                        "start_line": 13,
+                                        "end_line": 13,
+                                        "start_column": 15,
+                                        "end_column": 19
+                                    }
+                                ],
+                                "related_call_site": null
+                            }
+                        ]
+                    }
+                }
+            },
+            "variables": [
+                {
+                    "name": "a",
+                    "type": "int",
+                    "initializer": "0",
+                    "value": null,
+                    "scope": "module",
+                    "start_line": 5,
+                    "end_line": 5,
+                    "start_column": 0,
+                    "end_column": 1
+                },
+                {
+                    "name": "b",
+                    "type": "int",
+                    "initializer": "a + 1",
+                    "value": null,
+                    "scope": "module",
+                    "start_line": 6,
+                    "end_line": 6,
+                    "start_column": 0,
+                    "end_column": 1
+                }
+            ],
+            "hammock_block": {
+                "block_id": 139666835139440,
+                "block_full_qualifier": "main",
+                "project_full_qualifier": "src.main",
+                "block_type": "module",
+                "start_line": 1,
+                "end_line": 22,
+                "meta_data": {
+                    "source_file": "/root/Workspace/python-examples/simple_repo/src/main.py"
+                },
+                "children": [
+                    139666835788528,
+                    139666835791120,
+                    139666835789200,
+                    139666835791792,
+                    139666835216240,
+                    139666835214128,
+                    139666835216248
+                ],
+                "parent": null,
+                "call_sites": [],
+                "local_variables": [],
+                "accessed_variables": [],
+                "class_attributes": [],
+                "func_parameters": [],
+                "relations": []
+            },
+            "module_hammock_blocks": [
+                {
+                    "block_id": 139666835788528,
+                    "block_full_qualifier": "",
+                    "project_full_qualifier": "",
+                    "block_type": "import_from_statement",
+                    "start_line": 1,
+                    "end_line": 1,
+                    "meta_data": {
+                        "source_file": "/root/Workspace/python-examples/simple_repo/src/main.py"
+                    },
+                    "children": [],
+                    "parent": 139666835139440,
+                    "call_sites": [],
+                    "local_variables": [],
+                    "accessed_variables": [],
+                    "class_attributes": [],
+                    "func_parameters": [],
+                    "relations": []
+                },
+                {
+                    "block_id": 139666835791120,
+                    "block_full_qualifier": "",
+                    "project_full_qualifier": "",
+                    "block_type": "import_from_statement",
+                    "start_line": 3,
+                    "end_line": 3,
+                    "meta_data": {
+                        "source_file": "/root/Workspace/python-examples/simple_repo/src/main.py"
+                    },
+                    "children": [],
+                    "parent": 139666835139440,
+                    "call_sites": [],
+                    "local_variables": [],
+                    "accessed_variables": [],
+                    "class_attributes": [],
+                    "func_parameters": [],
+                    "relations": []
+                },
+                {
+                    "block_id": 139666835789200,
+                    "block_full_qualifier": "",
+                    "project_full_qualifier": "",
+                    "block_type": "import_from_statement",
+                    "start_line": 2,
+                    "end_line": 2,
+                    "meta_data": {
+                        "source_file": "/root/Workspace/python-examples/simple_repo/src/main.py"
+                    },
+                    "children": [],
+                    "parent": 139666835139440,
+                    "call_sites": [],
+                    "local_variables": [],
+                    "accessed_variables": [],
+                    "class_attributes": [],
+                    "func_parameters": [],
+                    "relations": []
+                },
+                {
+                    "block_id": 139666835791792,
+                    "block_full_qualifier": "",
+                    "project_full_qualifier": "",
+                    "block_type": "expression_statement",
+                    "start_line": 5,
+                    "end_line": 6,
+                    "meta_data": {
+                        "source_file": "/root/Workspace/python-examples/simple_repo/src/main.py"
+                    },
+                    "children": [],
+                    "parent": 139666835139440,
+                    "call_sites": [],
+                    "local_variables": [
+                        {
+                            "name": "a",
+                            "type": "int",
+                            "initializer": "0",
+                            "value": null,
+                            "scope": "module",
+                            "start_line": 5,
+                            "end_line": 5,
+                            "start_column": 0,
+                            "end_column": 1
+                        },
+                        {
+                            "name": "b",
+                            "type": "int",
+                            "initializer": "a + 1",
+                            "value": null,
+                            "scope": "module",
+                            "start_line": 6,
+                            "end_line": 6,
+                            "start_column": 0,
+                            "end_column": 1
+                        }
+                    ],
+                    "accessed_variables": [],
+                    "class_attributes": [],
+                    "func_parameters": [],
+                    "relations": [
+                        {
+                            "relation_type": "data_relation: variable_accessed",
+                            "related_block_id": 139666835216240,
+                            "related_block_full_qualifier": "main.submain",
+                            "related_project_full_qualifier": "src.main.submain",
+                            "related_block_type": "function_definition",
+                            "related_variables": [
+                                {
+                                    "name": "a",
+                                    "scope": "local",
+                                    "kind": "variable",
+                                    "type": "int",
+                                    "qualified_name": "builtins.int",
+                                    "is_builtin": false,
+                                    "lineno": 11,
+                                    "col_offset": 11
+                                },
+                                {
+                                    "name": "a",
+                                    "type": "int",
+                                    "initializer": "0",
+                                    "value": null,
+                                    "scope": "module",
+                                    "start_line": 5,
+                                    "end_line": 5,
+                                    "start_column": 0,
+                                    "end_column": 1
+                                }
+                            ],
+                            "related_call_site": null
+                        },
+                        {
+                            "relation_type": "data_relation: variable_accessed",
+                            "related_block_id": 139666835216240,
+                            "related_block_full_qualifier": "main.submain",
+                            "related_project_full_qualifier": "src.main.submain",
+                            "related_block_type": "function_definition",
+                            "related_variables": [
+                                {
+                                    "name": "b",
+                                    "scope": "local",
+                                    "kind": "variable",
+                                    "type": "int",
+                                    "qualified_name": "builtins.int",
+                                    "is_builtin": false,
+                                    "lineno": 11,
+                                    "col_offset": 14
+                                },
+                                {
+                                    "name": "b",
+                                    "type": "int",
+                                    "initializer": "a + 1",
+                                    "value": null,
+                                    "scope": "module",
+                                    "start_line": 6,
+                                    "end_line": 6,
+                                    "start_column": 0,
+                                    "end_column": 1
+                                }
+                            ],
+                            "related_call_site": null
+                        },
+                        {
+                            "relation_type": "data_relation: variable_accessed",
+                            "related_block_id": 139666835796400,
+                            "related_block_full_qualifier": "",
+                            "related_project_full_qualifier": "",
+                            "related_block_type": "expression_statement",
+                            "related_variables": [
+                                {
+                                    "name": "a",
+                                    "scope": "local",
+                                    "kind": "variable",
+                                    "type": "int",
+                                    "qualified_name": "builtins.int",
+                                    "is_builtin": false,
+                                    "lineno": 19,
+                                    "col_offset": 10
+                                },
+                                {
+                                    "name": "a",
+                                    "type": "int",
+                                    "initializer": "0",
+                                    "value": null,
+                                    "scope": "module",
+                                    "start_line": 5,
+                                    "end_line": 5,
+                                    "start_column": 0,
+                                    "end_column": 1
+                                }
+                            ],
+                            "related_call_site": null
+                        },
+                        {
+                            "relation_type": "data_relation: variable_accessed",
+                            "related_block_id": 139666835796400,
+                            "related_block_full_qualifier": "",
+                            "related_project_full_qualifier": "",
+                            "related_block_type": "expression_statement",
+                            "related_variables": [
+                                {
+                                    "name": "b",
+                                    "scope": "local",
+                                    "kind": "variable",
+                                    "type": "int",
+                                    "qualified_name": "builtins.int",
+                                    "is_builtin": false,
+                                    "lineno": 19,
+                                    "col_offset": 13
+                                },
+                                {
+                                    "name": "b",
+                                    "type": "int",
+                                    "initializer": "a + 1",
+                                    "value": null,
+                                    "scope": "module",
+                                    "start_line": 6,
+                                    "end_line": 6,
+                                    "start_column": 0,
+                                    "end_column": 1
+                                }
+                            ],
+                            "related_call_site": null
+                        }
+                    ]
+                },
+                {
+                    "block_id": 139666835793424,
+                    "block_full_qualifier": "",
+                    "project_full_qualifier": "",
+                    "block_type": "expression_statement",
+                    "start_line": 9,
+                    "end_line": 10,
+                    "meta_data": {
+                        "source_file": "/root/Workspace/python-examples/simple_repo/src/main.py"
+                    },
+                    "children": [],
+                    "parent": 139666835216240,
+                    "call_sites": [],
+                    "local_variables": [],
+                    "accessed_variables": [],
+                    "class_attributes": [],
+                    "func_parameters": [],
+                    "relations": []
+                },
+                {
+                    "block_id": 139666835216240,
+                    "block_full_qualifier": "main.submain",
+                    "project_full_qualifier": "src.main.submain",
+                    "block_type": "function_definition",
+                    "start_line": 8,
+                    "end_line": 11,
+                    "meta_data": {
+                        "source_file": "/root/Workspace/python-examples/simple_repo/src/main.py"
+                    },
+                    "children": [
+                        139666835793424
+                    ],
+                    "parent": 139666835139440,
+                    "call_sites": [],
+                    "local_variables": [],
+                    "accessed_variables": [
+                        {
+                            "name": "a",
+                            "scope": "local",
+                            "kind": "variable",
+                            "type": "int",
+                            "qualified_name": "builtins.int",
+                            "is_builtin": false,
+                            "lineno": 11,
+                            "col_offset": 11
+                        },
+                        {
+                            "name": "b",
+                            "scope": "local",
+                            "kind": "variable",
+                            "type": "int",
+                            "qualified_name": "builtins.int",
+                            "is_builtin": false,
+                            "lineno": 11,
+                            "col_offset": 14
+                        }
+                    ],
+                    "class_attributes": [],
+                    "func_parameters": [],
+                    "relations": [
+                        {
+                            "relation_type": "data_relation: variable_declaration",
+                            "related_block_id": 139666835791792,
+                            "related_block_full_qualifier": "",
+                            "related_project_full_qualifier": "",
+                            "related_block_type": "expression_statement",
+                            "related_variables": [
+                                {
+                                    "name": "a",
+                                    "scope": "local",
+                                    "kind": "variable",
+                                    "type": "int",
+                                    "qualified_name": "builtins.int",
+                                    "is_builtin": false,
+                                    "lineno": 11,
+                                    "col_offset": 11
+                                },
+                                {
+                                    "name": "a",
+                                    "type": "int",
+                                    "initializer": "0",
+                                    "value": null,
+                                    "scope": "module",
+                                    "start_line": 5,
+                                    "end_line": 5,
+                                    "start_column": 0,
+                                    "end_column": 1
+                                }
+                            ],
+                            "related_call_site": null
+                        },
+                        {
+                            "relation_type": "data_relation: variable_declaration",
+                            "related_block_id": 139666835791792,
+                            "related_block_full_qualifier": "",
+                            "related_project_full_qualifier": "",
+                            "related_block_type": "expression_statement",
+                            "related_variables": [
+                                {
+                                    "name": "b",
+                                    "scope": "local",
+                                    "kind": "variable",
+                                    "type": "int",
+                                    "qualified_name": "builtins.int",
+                                    "is_builtin": false,
+                                    "lineno": 11,
+                                    "col_offset": 14
+                                },
+                                {
+                                    "name": "b",
+                                    "type": "int",
+                                    "initializer": "a + 1",
+                                    "value": null,
+                                    "scope": "module",
+                                    "start_line": 6,
+                                    "end_line": 6,
+                                    "start_column": 0,
+                                    "end_column": 1
+                                }
+                            ],
+                            "related_call_site": null
+                        },
+                        {
+                            "relation_type": "caller_callee_relation: function_invocation_from_caller",
+                            "related_block_id": 139666835796400,
+                            "related_block_full_qualifier": "",
+                            "related_project_full_qualifier": "",
+                            "related_block_type": "expression_statement",
+                            "related_variables": null,
+                            "related_call_site": {
+                                "method_name": "submain",
+                                "receiver_expr": null,
+                                "receiver_type": null,
+                                "argument_types": [],
+                                "return_type": "submain",
+                                "callee_signature": "src.main.submain",
+                                "is_constructor_call": false,
+                                "start_line": 18,
+                                "start_column": 4,
+                                "end_line": 18,
+                                "end_column": 13
+                            }
+                        }
+                    ]
+                },
+                {
+                    "block_id": 139666835214128,
+                    "block_full_qualifier": "",
+                    "project_full_qualifier": "",
+                    "block_type": "expression_statement",
+                    "start_line": 22,
+                    "end_line": 22,
+                    "meta_data": {
+                        "source_file": "/root/Workspace/python-examples/simple_repo/src/main.py"
+                    },
+                    "children": [],
+                    "parent": 139666835139440,
+                    "call_sites": [],
+                    "local_variables": [],
+                    "accessed_variables": [],
+                    "class_attributes": [],
+                    "func_parameters": [],
+                    "relations": []
+                },
+                {
+                    "block_id": 139666835796400,
+                    "block_full_qualifier": "",
+                    "project_full_qualifier": "",
+                    "block_type": "expression_statement",
+                    "start_line": 14,
+                    "end_line": 19,
+                    "meta_data": {
+                        "source_file": "/root/Workspace/python-examples/simple_repo/src/main.py"
+                    },
+                    "children": [],
+                    "parent": 139666835216248,
+                    "call_sites": [
+                        {
+                            "method_name": "Module1",
+                            "receiver_expr": null,
+                            "receiver_type": null,
+                            "argument_types": [],
+                            "return_type": "Module1",
+                            "callee_signature": "src.sub_folder1.module1.Module1",
+                            "is_constructor_call": false,
+                            "start_line": 14,
+                            "start_column": 14,
+                            "end_line": 14,
+                            "end_column": 23
+                        },
+                        {
+                            "method_name": "Module2",
+                            "receiver_expr": null,
+                            "receiver_type": null,
+                            "argument_types": [],
+                            "return_type": "Module2",
+                            "callee_signature": "src.sub_folder1.module2.Module2",
+                            "is_constructor_call": false,
+                            "start_line": 15,
+                            "start_column": 14,
+                            "end_line": 15,
+                            "end_column": 23
+                        },
+                        {
+                            "method_name": "minus",
+                            "receiver_expr": "module2",
+                            "receiver_type": "Module2",
+                            "argument_types": [
+                                "int",
+                                "int"
+                            ],
+                            "return_type": "Module2",
+                            "callee_signature": "src.sub_folder1.module2.Module2",
+                            "is_constructor_call": false,
+                            "start_line": 17,
+                            "start_column": 8,
+                            "end_line": 17,
+                            "end_column": 33
+                        },
+                        {
+                            "method_name": "submain",
+                            "receiver_expr": null,
+                            "receiver_type": null,
+                            "argument_types": [],
+                            "return_type": "submain",
+                            "callee_signature": "src.main.submain",
+                            "is_constructor_call": false,
+                            "start_line": 18,
+                            "start_column": 4,
+                            "end_line": 18,
+                            "end_column": 13
+                        },
+                        {
+                            "method_name": "print",
+                            "receiver_expr": null,
+                            "receiver_type": null,
+                            "argument_types": [
+                                "int",
+                                "int",
+                                "int",
+                                "int"
+                            ],
+                            "return_type": "print",
+                            "callee_signature": "builtins.print",
+                            "is_constructor_call": false,
+                            "start_line": 19,
+                            "start_column": 4,
+                            "end_line": 19,
+                            "end_column": 21
+                        },
+                        {
+                            "method_name": "add",
+                            "receiver_expr": null,
+                            "receiver_type": null,
+                            "argument_types": [
+                                "int",
+                                "int"
+                            ],
+                            "return_type": "add",
+                            "callee_signature": "src.sub_folder1.module3.add",
+                            "is_constructor_call": false,
+                            "start_line": 16,
+                            "start_column": 8,
+                            "end_line": 16,
+                            "end_column": 17
+                        }
+                    ],
+                    "local_variables": [
+                        {
+                            "name": "module1",
+                            "type": "Module1",
+                            "initializer": "Module1()",
+                            "value": null,
+                            "scope": "function",
+                            "start_line": 14,
+                            "end_line": 14,
+                            "start_column": 4,
+                            "end_column": 11
+                        },
+                        {
+                            "name": "module2",
+                            "type": "Module2",
+                            "initializer": "Module2()",
+                            "value": null,
+                            "scope": "function",
+                            "start_line": 15,
+                            "end_line": 15,
+                            "start_column": 4,
+                            "end_column": 11
+                        },
+                        {
+                            "name": "c",
+                            "type": "int",
+                            "initializer": "add(6, 7) + module1.add(a, b)",
+                            "value": null,
+                            "scope": "function",
+                            "start_line": 16,
+                            "end_line": 16,
+                            "start_column": 4,
+                            "end_column": 5
+                        },
+                        {
+                            "name": "d",
+                            "type": "int",
+                            "initializer": "module2.minus(arg1, arg2)",
+                            "value": null,
+                            "scope": "function",
+                            "start_line": 17,
+                            "end_line": 17,
+                            "start_column": 4,
+                            "end_column": 5
+                        }
+                    ],
+                    "accessed_variables": [
+                        {
+                            "name": "arg1",
+                            "scope": "local",
+                            "kind": "variable",
+                            "type": "int",
+                            "qualified_name": "builtins.int",
+                            "is_builtin": false,
+                            "lineno": 17,
+                            "col_offset": 22
+                        },
+                        {
+                            "name": "arg2",
+                            "scope": "local",
+                            "kind": "variable",
+                            "type": "int",
+                            "qualified_name": "builtins.int",
+                            "is_builtin": false,
+                            "lineno": 17,
+                            "col_offset": 28
+                        },
+                        {
+                            "name": "a",
+                            "scope": "local",
+                            "kind": "variable",
+                            "type": "int",
+                            "qualified_name": "builtins.int",
+                            "is_builtin": false,
+                            "lineno": 19,
+                            "col_offset": 10
+                        },
+                        {
+                            "name": "b",
+                            "scope": "local",
+                            "kind": "variable",
+                            "type": "int",
+                            "qualified_name": "builtins.int",
+                            "is_builtin": false,
+                            "lineno": 19,
+                            "col_offset": 13
+                        },
+                        {
+                            "name": "c",
+                            "scope": "local",
+                            "kind": "variable",
+                            "type": "int",
+                            "qualified_name": "builtins.int",
+                            "is_builtin": false,
+                            "lineno": 19,
+                            "col_offset": 16
+                        },
+                        {
+                            "name": "d",
+                            "scope": "local",
+                            "kind": "variable",
+                            "type": "int",
+                            "qualified_name": "builtins.int",
+                            "is_builtin": false,
+                            "lineno": 19,
+                            "col_offset": 19
+                        },
+                        {
+                            "name": "a",
+                            "scope": "local",
+                            "kind": "variable",
+                            "type": "int",
+                            "qualified_name": "builtins.int",
+                            "is_builtin": false,
+                            "lineno": 16,
+                            "col_offset": 32
+                        },
+                        {
+                            "name": "b",
+                            "scope": "local",
+                            "kind": "variable",
+                            "type": "int",
+                            "qualified_name": "builtins.int",
+                            "is_builtin": false,
+                            "lineno": 16,
+                            "col_offset": 35
+                        },
+                        {
+                            "name": "module2",
+                            "scope": "local",
+                            "kind": "variable",
+                            "type": "Module2",
+                            "qualified_name": "src.sub_folder1.module2.Module2",
+                            "is_builtin": false,
+                            "lineno": 17,
+                            "col_offset": 8
+                        },
+                        {
+                            "name": "module1",
+                            "scope": "local",
+                            "kind": "variable",
+                            "type": "Module1",
+                            "qualified_name": "src.sub_folder1.module1.Module1",
+                            "is_builtin": false,
+                            "lineno": 16,
+                            "col_offset": 20
+                        }
+                    ],
+                    "class_attributes": [],
+                    "func_parameters": [],
+                    "relations": [
+                        {
+                            "relation_type": "data_relation: variable_declaration",
+                            "related_block_id": 139666835216248,
+                            "related_block_full_qualifier": "main.main",
+                            "related_project_full_qualifier": "src.main.main",
+                            "related_block_type": "function_definition",
+                            "related_variables": [
+                                {
+                                    "name": "arg1",
+                                    "scope": "local",
+                                    "kind": "variable",
+                                    "type": "int",
+                                    "qualified_name": "builtins.int",
+                                    "is_builtin": false,
+                                    "lineno": 17,
+                                    "col_offset": 22
+                                },
+                                {
+                                    "name": "arg1",
+                                    "type": "int",
+                                    "default_value": null,
+                                    "start_line": 13,
+                                    "end_line": 13,
+                                    "start_column": 9,
+                                    "end_column": 13
+                                }
+                            ],
+                            "related_call_site": null
+                        },
+                        {
+                            "relation_type": "data_relation: variable_declaration",
+                            "related_block_id": 139666835216248,
+                            "related_block_full_qualifier": "main.main",
+                            "related_project_full_qualifier": "src.main.main",
+                            "related_block_type": "function_definition",
+                            "related_variables": [
+                                {
+                                    "name": "arg2",
+                                    "scope": "local",
+                                    "kind": "variable",
+                                    "type": "int",
+                                    "qualified_name": "builtins.int",
+                                    "is_builtin": false,
+                                    "lineno": 17,
+                                    "col_offset": 28
+                                },
+                                {
+                                    "name": "arg2",
+                                    "type": "int",
+                                    "default_value": null,
+                                    "start_line": 13,
+                                    "end_line": 13,
+                                    "start_column": 15,
+                                    "end_column": 19
+                                }
+                            ],
+                            "related_call_site": null
+                        },
+                        {
+                            "relation_type": "data_relation: variable_declaration",
+                            "related_block_id": 139666835791792,
+                            "related_block_full_qualifier": "",
+                            "related_project_full_qualifier": "",
+                            "related_block_type": "expression_statement",
+                            "related_variables": [
+                                {
+                                    "name": "a",
+                                    "scope": "local",
+                                    "kind": "variable",
+                                    "type": "int",
+                                    "qualified_name": "builtins.int",
+                                    "is_builtin": false,
+                                    "lineno": 19,
+                                    "col_offset": 10
+                                },
+                                {
+                                    "name": "a",
+                                    "type": "int",
+                                    "initializer": "0",
+                                    "value": null,
+                                    "scope": "module",
+                                    "start_line": 5,
+                                    "end_line": 5,
+                                    "start_column": 0,
+                                    "end_column": 1
+                                }
+                            ],
+                            "related_call_site": null
+                        },
+                        {
+                            "relation_type": "data_relation: variable_declaration",
+                            "related_block_id": 139666835791792,
+                            "related_block_full_qualifier": "",
+                            "related_project_full_qualifier": "",
+                            "related_block_type": "expression_statement",
+                            "related_variables": [
+                                {
+                                    "name": "b",
+                                    "scope": "local",
+                                    "kind": "variable",
+                                    "type": "int",
+                                    "qualified_name": "builtins.int",
+                                    "is_builtin": false,
+                                    "lineno": 19,
+                                    "col_offset": 13
+                                },
+                                {
+                                    "name": "b",
+                                    "type": "int",
+                                    "initializer": "a + 1",
+                                    "value": null,
+                                    "scope": "module",
+                                    "start_line": 6,
+                                    "end_line": 6,
+                                    "start_column": 0,
+                                    "end_column": 1
+                                }
+                            ],
+                            "related_call_site": null
+                        },
+                        {
+                            "relation_type": "caller_callee_relation: function_invocation_to_callee",
+                            "related_block_id": 139666835215088,
+                            "related_block_full_qualifier": "module1.Module1",
+                            "related_project_full_qualifier": "src.sub_folder1.module1.Module1",
+                            "related_block_type": "class_definition",
+                            "related_variables": null,
+                            "related_call_site": {
+                                "method_name": "Module1",
+                                "receiver_expr": null,
+                                "receiver_type": null,
+                                "argument_types": [],
+                                "return_type": "Module1",
+                                "callee_signature": "src.sub_folder1.module1.Module1",
+                                "is_constructor_call": false,
+                                "start_line": 14,
+                                "start_column": 14,
+                                "end_line": 14,
+                                "end_column": 23
+                            }
+                        },
+                        {
+                            "relation_type": "caller_callee_relation: function_invocation_to_callee",
+                            "related_block_id": 139666751898032,
+                            "related_block_full_qualifier": "module2.Module2",
+                            "related_project_full_qualifier": "src.sub_folder1.module2.Module2",
+                            "related_block_type": "class_definition",
+                            "related_variables": null,
+                            "related_call_site": {
+                                "method_name": "Module2",
+                                "receiver_expr": null,
+                                "receiver_type": null,
+                                "argument_types": [],
+                                "return_type": "Module2",
+                                "callee_signature": "src.sub_folder1.module2.Module2",
+                                "is_constructor_call": false,
+                                "start_line": 15,
+                                "start_column": 14,
+                                "end_line": 15,
+                                "end_column": 23
+                            }
+                        },
+                        {
+                            "relation_type": "caller_callee_relation: function_invocation_to_callee",
+                            "related_block_id": 139666753305272,
+                            "related_block_full_qualifier": "module2.Module2.minus",
+                            "related_project_full_qualifier": "src.sub_folder1.module2.Module2.minus",
+                            "related_block_type": "function_definition",
+                            "related_variables": null,
+                            "related_call_site": {
+                                "method_name": "minus",
+                                "receiver_expr": "module2",
+                                "receiver_type": "Module2",
+                                "argument_types": [
+                                    "int",
+                                    "int"
+                                ],
+                                "return_type": "Module2",
+                                "callee_signature": "src.sub_folder1.module2.Module2",
+                                "is_constructor_call": false,
+                                "start_line": 17,
+                                "start_column": 8,
+                                "end_line": 17,
+                                "end_column": 33
+                            }
+                        },
+                        {
+                            "relation_type": "caller_callee_relation: function_invocation_to_callee",
+                            "related_block_id": 139666835216240,
+                            "related_block_full_qualifier": "main.submain",
+                            "related_project_full_qualifier": "src.main.submain",
+                            "related_block_type": "function_definition",
+                            "related_variables": null,
+                            "related_call_site": {
+                                "method_name": "submain",
+                                "receiver_expr": null,
+                                "receiver_type": null,
+                                "argument_types": [],
+                                "return_type": "submain",
+                                "callee_signature": "src.main.submain",
+                                "is_constructor_call": false,
+                                "start_line": 18,
+                                "start_column": 4,
+                                "end_line": 18,
+                                "end_column": 13
+                            }
+                        },
+                        {
+                            "relation_type": "caller_callee_relation: function_invocation_to_callee",
+                            "related_block_id": 139666757693488,
+                            "related_block_full_qualifier": "module3.add",
+                            "related_project_full_qualifier": "src.sub_folder1.module3.add",
+                            "related_block_type": "function_definition",
+                            "related_variables": null,
+                            "related_call_site": {
+                                "method_name": "add",
+                                "receiver_expr": null,
+                                "receiver_type": null,
+                                "argument_types": [
+                                    "int",
+                                    "int"
+                                ],
+                                "return_type": "add",
+                                "callee_signature": "src.sub_folder1.module3.add",
+                                "is_constructor_call": false,
+                                "start_line": 16,
+                                "start_column": 8,
+                                "end_line": 16,
+                                "end_column": 17
+                            }
+                        }
+                    ]
+                },
+                {
+                    "block_id": 139666835216248,
+                    "block_full_qualifier": "main.main",
+                    "project_full_qualifier": "src.main.main",
+                    "block_type": "function_definition",
+                    "start_line": 13,
+                    "end_line": 19,
+                    "meta_data": {
+                        "source_file": "/root/Workspace/python-examples/simple_repo/src/main.py"
+                    },
+                    "children": [
+                        139666835796400
+                    ],
+                    "parent": 139666835139440,
+                    "call_sites": [],
+                    "local_variables": [],
+                    "accessed_variables": [],
+                    "class_attributes": [],
+                    "func_parameters": [
+                        {
+                            "name": "arg1",
+                            "type": "int",
+                            "default_value": null,
+                            "start_line": 13,
+                            "end_line": 13,
+                            "start_column": 9,
+                            "end_column": 13
+                        },
+                        {
+                            "name": "arg2",
+                            "type": "int",
+                            "default_value": null,
+                            "start_line": 13,
+                            "end_line": 13,
+                            "start_column": 15,
+                            "end_column": 19
+                        }
+                    ],
+                    "relations": [
+                        {
+                            "relation_type": "data_relation: variable_accessed",
+                            "related_block_id": 139666835796400,
+                            "related_block_full_qualifier": "",
+                            "related_project_full_qualifier": "",
+                            "related_block_type": "expression_statement",
+                            "related_variables": [
+                                {
+                                    "name": "arg1",
+                                    "scope": "local",
+                                    "kind": "variable",
+                                    "type": "int",
+                                    "qualified_name": "builtins.int",
+                                    "is_builtin": false,
+                                    "lineno": 17,
+                                    "col_offset": 22
+                                },
+                                {
+                                    "name": "arg1",
+                                    "type": "int",
+                                    "default_value": null,
+                                    "start_line": 13,
+                                    "end_line": 13,
+                                    "start_column": 9,
+                                    "end_column": 13
+                                }
+                            ],
+                            "related_call_site": null
+                        },
+                        {
+                            "relation_type": "data_relation: variable_accessed",
+                            "related_block_id": 139666835796400,
+                            "related_block_full_qualifier": "",
+                            "related_project_full_qualifier": "",
+                            "related_block_type": "expression_statement",
+                            "related_variables": [
+                                {
+                                    "name": "arg2",
+                                    "scope": "local",
+                                    "kind": "variable",
+                                    "type": "int",
+                                    "qualified_name": "builtins.int",
+                                    "is_builtin": false,
+                                    "lineno": 17,
+                                    "col_offset": 28
+                                },
+                                {
+                                    "name": "arg2",
+                                    "type": "int",
+                                    "default_value": null,
+                                    "start_line": 13,
+                                    "end_line": 13,
+                                    "start_column": 15,
+                                    "end_column": 19
+                                }
+                            ],
+                            "related_call_site": null
+                        }
+                    ]
+                },
+                {
+                    "block_id": 139666835139440,
+                    "block_full_qualifier": "main",
+                    "project_full_qualifier": "src.main",
+                    "block_type": "module",
+                    "start_line": 1,
+                    "end_line": 22,
+                    "meta_data": {
+                        "source_file": "/root/Workspace/python-examples/simple_repo/src/main.py"
+                    },
+                    "children": [
+                        139666835788528,
+                        139666835791120,
+                        139666835789200,
+                        139666835791792,
+                        139666835216240,
+                        139666835214128,
+                        139666835216248
+                    ],
+                    "parent": null,
+                    "call_sites": [],
+                    "local_variables": [],
+                    "accessed_variables": [],
+                    "class_attributes": [],
+                    "func_parameters": [],
+                    "relations": []
+                }
+            ]
+        },
+        "/root/Workspace/python-examples/simple_repo/src/sub_folder1/__init__.py": {
+            "file_path": "/root/Workspace/python-examples/simple_repo/src/sub_folder1/__init__.py",
+            "module_name": "__init__",
+            "imports": [],
+            "comments": [],
+            "classes": {},
+            "functions": {},
+            "variables": [],
+            "hammock_block": null,
+            "module_hammock_blocks": []
+        },
+        "/root/Workspace/python-examples/simple_repo/src/sub_folder1/module3.py": {
+            "file_path": "/root/Workspace/python-examples/simple_repo/src/sub_folder1/module3.py",
+            "module_name": "module3",
+            "imports": [],
+            "comments": [],
+            "classes": {},
+            "functions": {
+                "add": {
+                    "name": "add",
+                    "path": "/root/Workspace/python-examples/simple_repo/src/sub_folder1/module3.py",
+                    "signature": "module3.add",
+                    "comments": [],
+                    "decorators": [],
+                    "parameters": [
+                        {
+                            "name": "a",
+                            "type": null,
+                            "default_value": null,
+                            "start_line": 1,
+                            "end_line": 1,
+                            "start_column": 8,
+                            "end_column": 9
+                        },
+                        {
+                            "name": "b",
+                            "type": null,
+                            "default_value": null,
+                            "start_line": 1,
+                            "end_line": 1,
+                            "start_column": 11,
+                            "end_column": 12
+                        }
+                    ],
+                    "return_type": null,
+                    "code": "def add(a, b):\n    return a + b",
+                    "start_line": 1,
+                    "end_line": 2,
+                    "code_start_line": 2,
+                    "accessed_symbols": [
+                        {
+                            "name": "a",
+                            "scope": "local",
+                            "kind": "variable",
+                            "type": null,
+                            "qualified_name": null,
+                            "is_builtin": false,
+                            "lineno": 2,
+                            "col_offset": 11
+                        },
+                        {
+                            "name": "b",
+                            "scope": "local",
+                            "kind": "variable",
+                            "type": null,
+                            "qualified_name": null,
+                            "is_builtin": false,
+                            "lineno": 2,
+                            "col_offset": 15
+                        }
+                    ],
+                    "call_sites": [],
+                    "local_variables": [],
+                    "cyclomatic_complexity": 2,
+                    "hammock_block": {
+                        "block_id": 139666757693488,
+                        "block_full_qualifier": "module3.add",
+                        "project_full_qualifier": "src.sub_folder1.module3.add",
+                        "block_type": "function_definition",
+                        "start_line": 1,
+                        "end_line": 2,
+                        "meta_data": {
+                            "source_file": "/root/Workspace/python-examples/simple_repo/src/sub_folder1/module3.py"
+                        },
+                        "children": [],
+                        "parent": 139666762627344,
+                        "call_sites": [],
+                        "local_variables": [],
+                        "accessed_variables": [
+                            {
+                                "name": "a",
+                                "scope": "local",
+                                "kind": "variable",
+                                "type": null,
+                                "qualified_name": null,
+                                "is_builtin": false,
+                                "lineno": 2,
+                                "col_offset": 11
+                            },
+                            {
+                                "name": "b",
+                                "scope": "local",
+                                "kind": "variable",
+                                "type": null,
+                                "qualified_name": null,
+                                "is_builtin": false,
+                                "lineno": 2,
+                                "col_offset": 15
+                            }
+                        ],
+                        "class_attributes": [],
+                        "func_parameters": [
+                            {
+                                "name": "a",
+                                "type": null,
+                                "default_value": null,
+                                "start_line": 1,
+                                "end_line": 1,
+                                "start_column": 8,
+                                "end_column": 9
+                            },
+                            {
+                                "name": "b",
+                                "type": null,
+                                "default_value": null,
+                                "start_line": 1,
+                                "end_line": 1,
+                                "start_column": 11,
+                                "end_column": 12
+                            }
+                        ],
+                        "relations": [
+                            {
+                                "relation_type": "caller_callee_relation: function_invocation_from_caller",
+                                "related_block_id": 139666835796400,
+                                "related_block_full_qualifier": "",
+                                "related_project_full_qualifier": "",
+                                "related_block_type": "expression_statement",
+                                "related_variables": null,
+                                "related_call_site": {
+                                    "method_name": "add",
+                                    "receiver_expr": null,
+                                    "receiver_type": null,
+                                    "argument_types": [
+                                        "int",
+                                        "int"
+                                    ],
+                                    "return_type": "add",
+                                    "callee_signature": "src.sub_folder1.module3.add",
+                                    "is_constructor_call": false,
+                                    "start_line": 16,
+                                    "start_column": 8,
+                                    "end_line": 16,
+                                    "end_column": 17
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            "variables": [],
+            "hammock_block": {
+                "block_id": 139666762627344,
+                "block_full_qualifier": "module3",
+                "project_full_qualifier": "src.sub_folder1.module3",
+                "block_type": "module",
+                "start_line": 1,
+                "end_line": 2,
+                "meta_data": {
+                    "source_file": "/root/Workspace/python-examples/simple_repo/src/sub_folder1/module3.py"
+                },
+                "children": [
+                    139666757693488
+                ],
+                "parent": null,
+                "call_sites": [],
+                "local_variables": [],
+                "accessed_variables": [],
+                "class_attributes": [],
+                "func_parameters": [],
+                "relations": []
+            },
+            "module_hammock_blocks": [
+                {
+                    "block_id": 139666757693488,
+                    "block_full_qualifier": "module3.add",
+                    "project_full_qualifier": "src.sub_folder1.module3.add",
+                    "block_type": "function_definition",
+                    "start_line": 1,
+                    "end_line": 2,
+                    "meta_data": {
+                        "source_file": "/root/Workspace/python-examples/simple_repo/src/sub_folder1/module3.py"
+                    },
+                    "children": [],
+                    "parent": 139666762627344,
+                    "call_sites": [],
+                    "local_variables": [],
+                    "accessed_variables": [
+                        {
+                            "name": "a",
+                            "scope": "local",
+                            "kind": "variable",
+                            "type": null,
+                            "qualified_name": null,
+                            "is_builtin": false,
+                            "lineno": 2,
+                            "col_offset": 11
+                        },
+                        {
+                            "name": "b",
+                            "scope": "local",
+                            "kind": "variable",
+                            "type": null,
+                            "qualified_name": null,
+                            "is_builtin": false,
+                            "lineno": 2,
+                            "col_offset": 15
+                        }
+                    ],
+                    "class_attributes": [],
+                    "func_parameters": [
+                        {
+                            "name": "a",
+                            "type": null,
+                            "default_value": null,
+                            "start_line": 1,
+                            "end_line": 1,
+                            "start_column": 8,
+                            "end_column": 9
+                        },
+                        {
+                            "name": "b",
+                            "type": null,
+                            "default_value": null,
+                            "start_line": 1,
+                            "end_line": 1,
+                            "start_column": 11,
+                            "end_column": 12
+                        }
+                    ],
+                    "relations": [
+                        {
+                            "relation_type": "caller_callee_relation: function_invocation_from_caller",
+                            "related_block_id": 139666835796400,
+                            "related_block_full_qualifier": "",
+                            "related_project_full_qualifier": "",
+                            "related_block_type": "expression_statement",
+                            "related_variables": null,
+                            "related_call_site": {
+                                "method_name": "add",
+                                "receiver_expr": null,
+                                "receiver_type": null,
+                                "argument_types": [
+                                    "int",
+                                    "int"
+                                ],
+                                "return_type": "add",
+                                "callee_signature": "src.sub_folder1.module3.add",
+                                "is_constructor_call": false,
+                                "start_line": 16,
+                                "start_column": 8,
+                                "end_line": 16,
+                                "end_column": 17
+                            }
+                        }
+                    ]
+                },
+                {
+                    "block_id": 139666762627344,
+                    "block_full_qualifier": "module3",
+                    "project_full_qualifier": "src.sub_folder1.module3",
+                    "block_type": "module",
+                    "start_line": 1,
+                    "end_line": 2,
+                    "meta_data": {
+                        "source_file": "/root/Workspace/python-examples/simple_repo/src/sub_folder1/module3.py"
+                    },
+                    "children": [
+                        139666757693488
+                    ],
+                    "parent": null,
+                    "call_sites": [],
+                    "local_variables": [],
+                    "accessed_variables": [],
+                    "class_attributes": [],
+                    "func_parameters": [],
+                    "relations": []
+                }
+            ]
+        },
+        "/root/Workspace/python-examples/simple_repo/src/sub_folder1/module2.py": {
+            "file_path": "/root/Workspace/python-examples/simple_repo/src/sub_folder1/module2.py",
+            "module_name": "module2",
+            "imports": [],
+            "comments": [],
+            "classes": {
+                ".root.Workspace.python-examples.simple_repo.src.sub_folder1.module2.Module2": {
+                    "name": "Module2",
+                    "signature": ".root.Workspace.python-examples.simple_repo.src.sub_folder1.module2.Module2",
+                    "comments": [],
+                    "code": "class Module2(object):\n    c = 1\n\n    def minus(self, a, b):\n        b = b - 1\n        return a - b - c\n\n    def add(self, a, b):\n        return a + b",
+                    "base_classes": [
+                        "object"
+                    ],
+                    "methods": {
+                        "minus": {
+                            "name": "minus",
+                            "path": "/root/Workspace/python-examples/simple_repo/src/sub_folder1/module2.py",
+                            "signature": "module2.Module2.minus",
+                            "comments": [],
+                            "decorators": [],
+                            "parameters": [
+                                {
+                                    "name": "self",
+                                    "type": "Module2",
+                                    "default_value": null,
+                                    "start_line": 3,
+                                    "end_line": 3,
+                                    "start_column": 14,
+                                    "end_column": 18
+                                },
+                                {
+                                    "name": "a",
+                                    "type": null,
+                                    "default_value": null,
+                                    "start_line": 3,
+                                    "end_line": 3,
+                                    "start_column": 20,
+                                    "end_column": 21
+                                },
+                                {
+                                    "name": "b",
+                                    "type": null,
+                                    "default_value": null,
+                                    "start_line": 3,
+                                    "end_line": 3,
+                                    "start_column": 23,
+                                    "end_column": 24
+                                }
+                            ],
+                            "return_type": null,
+                            "code": "def minus(self, a, b):\n    b = b - 1\n    return a - b - c",
+                            "start_line": 3,
+                            "end_line": 5,
+                            "code_start_line": 4,
+                            "accessed_symbols": [
+                                {
+                                    "name": "b",
+                                    "scope": "local",
+                                    "kind": "variable",
+                                    "type": null,
+                                    "qualified_name": null,
+                                    "is_builtin": false,
+                                    "lineno": 4,
+                                    "col_offset": 12
+                                },
+                                {
+                                    "name": "c",
+                                    "scope": "local",
+                                    "kind": "variable",
+                                    "type": null,
+                                    "qualified_name": null,
+                                    "is_builtin": false,
+                                    "lineno": 5,
+                                    "col_offset": 23
+                                },
+                                {
+                                    "name": "a",
+                                    "scope": "local",
+                                    "kind": "variable",
+                                    "type": null,
+                                    "qualified_name": null,
+                                    "is_builtin": false,
+                                    "lineno": 5,
+                                    "col_offset": 15
+                                },
+                                {
+                                    "name": "b",
+                                    "scope": "local",
+                                    "kind": "variable",
+                                    "type": "int",
+                                    "qualified_name": "builtins.int",
+                                    "is_builtin": false,
+                                    "lineno": 5,
+                                    "col_offset": 19
+                                }
+                            ],
+                            "call_sites": [],
+                            "local_variables": [
+                                {
+                                    "name": "b",
+                                    "type": "int",
+                                    "initializer": "b - 1",
+                                    "value": null,
+                                    "scope": "function",
+                                    "start_line": 4,
+                                    "end_line": 4,
+                                    "start_column": 8,
+                                    "end_column": 9
+                                }
+                            ],
+                            "cyclomatic_complexity": 2,
+                            "hammock_block": {
+                                "block_id": 139666753305272,
+                                "block_full_qualifier": "module2.Module2.minus",
+                                "project_full_qualifier": "src.sub_folder1.module2.Module2.minus",
+                                "block_type": "function_definition",
+                                "start_line": 3,
+                                "end_line": 5,
+                                "meta_data": {
+                                    "source_file": "/root/Workspace/python-examples/simple_repo/src/sub_folder1/module2.py"
+                                },
+                                "children": [
+                                    139666753304208
+                                ],
+                                "parent": 139666751898032,
+                                "call_sites": [],
+                                "local_variables": [],
+                                "accessed_variables": [
+                                    {
+                                        "name": "c",
+                                        "scope": "local",
+                                        "kind": "variable",
+                                        "type": null,
+                                        "qualified_name": null,
+                                        "is_builtin": false,
+                                        "lineno": 5,
+                                        "col_offset": 23
+                                    },
+                                    {
+                                        "name": "a",
+                                        "scope": "local",
+                                        "kind": "variable",
+                                        "type": null,
+                                        "qualified_name": null,
+                                        "is_builtin": false,
+                                        "lineno": 5,
+                                        "col_offset": 15
+                                    },
+                                    {
+                                        "name": "b",
+                                        "scope": "local",
+                                        "kind": "variable",
+                                        "type": "int",
+                                        "qualified_name": "builtins.int",
+                                        "is_builtin": false,
+                                        "lineno": 5,
+                                        "col_offset": 19
+                                    }
+                                ],
+                                "class_attributes": [],
+                                "func_parameters": [
+                                    {
+                                        "name": "self",
+                                        "type": "Module2",
+                                        "default_value": null,
+                                        "start_line": 3,
+                                        "end_line": 3,
+                                        "start_column": 14,
+                                        "end_column": 18
+                                    },
+                                    {
+                                        "name": "a",
+                                        "type": null,
+                                        "default_value": null,
+                                        "start_line": 3,
+                                        "end_line": 3,
+                                        "start_column": 20,
+                                        "end_column": 21
+                                    },
+                                    {
+                                        "name": "b",
+                                        "type": null,
+                                        "default_value": null,
+                                        "start_line": 3,
+                                        "end_line": 3,
+                                        "start_column": 23,
+                                        "end_column": 24
+                                    }
+                                ],
+                                "relations": [
+                                    {
+                                        "relation_type": "data_relation: variable_declaration",
+                                        "related_block_id": 139666753302768,
+                                        "related_block_full_qualifier": "",
+                                        "related_project_full_qualifier": "",
+                                        "related_block_type": "expression_statement",
+                                        "related_variables": [
+                                            {
+                                                "name": "c",
+                                                "scope": "local",
+                                                "kind": "variable",
+                                                "type": null,
+                                                "qualified_name": null,
+                                                "is_builtin": false,
+                                                "lineno": 5,
+                                                "col_offset": 23
+                                            },
+                                            {
+                                                "name": "c",
+                                                "type": "int",
+                                                "comments": [],
+                                                "start_line": 2,
+                                                "end_line": 2
+                                            }
+                                        ],
+                                        "related_call_site": null
+                                    },
+                                    {
+                                        "relation_type": "caller_callee_relation: function_invocation_from_caller",
+                                        "related_block_id": 139666835796400,
+                                        "related_block_full_qualifier": "",
+                                        "related_project_full_qualifier": "",
+                                        "related_block_type": "expression_statement",
+                                        "related_variables": null,
+                                        "related_call_site": {
+                                            "method_name": "minus",
+                                            "receiver_expr": "module2",
+                                            "receiver_type": "Module2",
+                                            "argument_types": [
+                                                "int",
+                                                "int"
+                                            ],
+                                            "return_type": "Module2",
+                                            "callee_signature": "src.sub_folder1.module2.Module2",
+                                            "is_constructor_call": false,
+                                            "start_line": 17,
+                                            "start_column": 8,
+                                            "end_line": 17,
+                                            "end_column": 33
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        "add": {
+                            "name": "add",
+                            "path": "/root/Workspace/python-examples/simple_repo/src/sub_folder1/module2.py",
+                            "signature": "module2.Module2.add",
+                            "comments": [],
+                            "decorators": [],
+                            "parameters": [
+                                {
+                                    "name": "self",
+                                    "type": "Module2",
+                                    "default_value": null,
+                                    "start_line": 7,
+                                    "end_line": 7,
+                                    "start_column": 12,
+                                    "end_column": 16
+                                },
+                                {
+                                    "name": "a",
+                                    "type": null,
+                                    "default_value": null,
+                                    "start_line": 7,
+                                    "end_line": 7,
+                                    "start_column": 18,
+                                    "end_column": 19
+                                },
+                                {
+                                    "name": "b",
+                                    "type": null,
+                                    "default_value": null,
+                                    "start_line": 7,
+                                    "end_line": 7,
+                                    "start_column": 21,
+                                    "end_column": 22
+                                }
+                            ],
+                            "return_type": null,
+                            "code": "def add(self, a, b):\n    return a + b",
+                            "start_line": 7,
+                            "end_line": 8,
+                            "code_start_line": 8,
+                            "accessed_symbols": [
+                                {
+                                    "name": "a",
+                                    "scope": "local",
+                                    "kind": "variable",
+                                    "type": null,
+                                    "qualified_name": null,
+                                    "is_builtin": false,
+                                    "lineno": 8,
+                                    "col_offset": 15
+                                },
+                                {
+                                    "name": "b",
+                                    "scope": "local",
+                                    "kind": "variable",
+                                    "type": null,
+                                    "qualified_name": null,
+                                    "is_builtin": false,
+                                    "lineno": 8,
+                                    "col_offset": 19
+                                }
+                            ],
+                            "call_sites": [],
+                            "local_variables": [],
+                            "cyclomatic_complexity": 2,
+                            "hammock_block": {
+                                "block_id": 139666751897752,
+                                "block_full_qualifier": "module2.Module2.add",
+                                "project_full_qualifier": "src.sub_folder1.module2.Module2.add",
+                                "block_type": "function_definition",
+                                "start_line": 7,
+                                "end_line": 8,
+                                "meta_data": {
+                                    "source_file": "/root/Workspace/python-examples/simple_repo/src/sub_folder1/module2.py"
+                                },
+                                "children": [],
+                                "parent": 139666751898032,
+                                "call_sites": [],
+                                "local_variables": [],
+                                "accessed_variables": [
+                                    {
+                                        "name": "a",
+                                        "scope": "local",
+                                        "kind": "variable",
+                                        "type": null,
+                                        "qualified_name": null,
+                                        "is_builtin": false,
+                                        "lineno": 8,
+                                        "col_offset": 15
+                                    },
+                                    {
+                                        "name": "b",
+                                        "scope": "local",
+                                        "kind": "variable",
+                                        "type": null,
+                                        "qualified_name": null,
+                                        "is_builtin": false,
+                                        "lineno": 8,
+                                        "col_offset": 19
+                                    }
+                                ],
+                                "class_attributes": [],
+                                "func_parameters": [
+                                    {
+                                        "name": "self",
+                                        "type": "Module2",
+                                        "default_value": null,
+                                        "start_line": 7,
+                                        "end_line": 7,
+                                        "start_column": 12,
+                                        "end_column": 16
+                                    },
+                                    {
+                                        "name": "a",
+                                        "type": null,
+                                        "default_value": null,
+                                        "start_line": 7,
+                                        "end_line": 7,
+                                        "start_column": 18,
+                                        "end_column": 19
+                                    },
+                                    {
+                                        "name": "b",
+                                        "type": null,
+                                        "default_value": null,
+                                        "start_line": 7,
+                                        "end_line": 7,
+                                        "start_column": 21,
+                                        "end_column": 22
+                                    }
+                                ],
+                                "relations": []
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "c": {
+                            "name": "c",
+                            "type": "int",
+                            "comments": [],
+                            "start_line": 2,
+                            "end_line": 2
+                        }
+                    },
+                    "inner_classes": {},
+                    "start_line": 1,
+                    "end_line": 8,
+                    "hammock_block": {
+                        "block_id": 139666751898032,
+                        "block_full_qualifier": "module2.Module2",
+                        "project_full_qualifier": "src.sub_folder1.module2.Module2",
+                        "block_type": "class_definition",
+                        "start_line": 1,
+                        "end_line": 8,
+                        "meta_data": {
+                            "source_file": "/root/Workspace/python-examples/simple_repo/src/sub_folder1/module2.py"
+                        },
+                        "children": [
+                            139666753305272,
+                            139666753302768,
+                            139666751897752
+                        ],
+                        "parent": 139666751884432,
+                        "call_sites": [],
+                        "local_variables": [],
+                        "accessed_variables": [],
+                        "class_attributes": [],
+                        "func_parameters": [],
+                        "relations": [
+                            {
+                                "relation_type": "caller_callee_relation: function_invocation_from_caller",
+                                "related_block_id": 139666835796400,
+                                "related_block_full_qualifier": "",
+                                "related_project_full_qualifier": "",
+                                "related_block_type": "expression_statement",
+                                "related_variables": null,
+                                "related_call_site": {
+                                    "method_name": "Module2",
+                                    "receiver_expr": null,
+                                    "receiver_type": null,
+                                    "argument_types": [],
+                                    "return_type": "Module2",
+                                    "callee_signature": "src.sub_folder1.module2.Module2",
+                                    "is_constructor_call": false,
+                                    "start_line": 15,
+                                    "start_column": 14,
+                                    "end_line": 15,
+                                    "end_column": 23
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            "functions": {},
+            "variables": [],
+            "hammock_block": {
+                "block_id": 139666751884432,
+                "block_full_qualifier": "module2",
+                "project_full_qualifier": "src.sub_folder1.module2",
+                "block_type": "module",
+                "start_line": 1,
+                "end_line": 8,
+                "meta_data": {
+                    "source_file": "/root/Workspace/python-examples/simple_repo/src/sub_folder1/module2.py"
+                },
+                "children": [
+                    139666751898032
+                ],
+                "parent": null,
+                "call_sites": [],
+                "local_variables": [],
+                "accessed_variables": [],
+                "class_attributes": [],
+                "func_parameters": [],
+                "relations": []
+            },
+            "module_hammock_blocks": [
+                {
+                    "block_id": 139666753304208,
+                    "block_full_qualifier": "",
+                    "project_full_qualifier": "",
+                    "block_type": "expression_statement",
+                    "start_line": 4,
+                    "end_line": 4,
+                    "meta_data": {
+                        "source_file": "/root/Workspace/python-examples/simple_repo/src/sub_folder1/module2.py"
+                    },
+                    "children": [],
+                    "parent": 139666753305272,
+                    "call_sites": [],
+                    "local_variables": [
+                        {
+                            "name": "b",
+                            "type": "int",
+                            "initializer": "b - 1",
+                            "value": null,
+                            "scope": "function",
+                            "start_line": 4,
+                            "end_line": 4,
+                            "start_column": 8,
+                            "end_column": 9
+                        }
+                    ],
+                    "accessed_variables": [
+                        {
+                            "name": "b",
+                            "scope": "local",
+                            "kind": "variable",
+                            "type": null,
+                            "qualified_name": null,
+                            "is_builtin": false,
+                            "lineno": 4,
+                            "col_offset": 12
+                        }
+                    ],
+                    "class_attributes": [],
+                    "func_parameters": [],
+                    "relations": []
+                },
+                {
+                    "block_id": 139666753305272,
+                    "block_full_qualifier": "module2.Module2.minus",
+                    "project_full_qualifier": "src.sub_folder1.module2.Module2.minus",
+                    "block_type": "function_definition",
+                    "start_line": 3,
+                    "end_line": 5,
+                    "meta_data": {
+                        "source_file": "/root/Workspace/python-examples/simple_repo/src/sub_folder1/module2.py"
+                    },
+                    "children": [
+                        139666753304208
+                    ],
+                    "parent": 139666751898032,
+                    "call_sites": [],
+                    "local_variables": [],
+                    "accessed_variables": [
+                        {
+                            "name": "c",
+                            "scope": "local",
+                            "kind": "variable",
+                            "type": null,
+                            "qualified_name": null,
+                            "is_builtin": false,
+                            "lineno": 5,
+                            "col_offset": 23
+                        },
+                        {
+                            "name": "a",
+                            "scope": "local",
+                            "kind": "variable",
+                            "type": null,
+                            "qualified_name": null,
+                            "is_builtin": false,
+                            "lineno": 5,
+                            "col_offset": 15
+                        },
+                        {
+                            "name": "b",
+                            "scope": "local",
+                            "kind": "variable",
+                            "type": "int",
+                            "qualified_name": "builtins.int",
+                            "is_builtin": false,
+                            "lineno": 5,
+                            "col_offset": 19
+                        }
+                    ],
+                    "class_attributes": [],
+                    "func_parameters": [
+                        {
+                            "name": "self",
+                            "type": "Module2",
+                            "default_value": null,
+                            "start_line": 3,
+                            "end_line": 3,
+                            "start_column": 14,
+                            "end_column": 18
+                        },
+                        {
+                            "name": "a",
+                            "type": null,
+                            "default_value": null,
+                            "start_line": 3,
+                            "end_line": 3,
+                            "start_column": 20,
+                            "end_column": 21
+                        },
+                        {
+                            "name": "b",
+                            "type": null,
+                            "default_value": null,
+                            "start_line": 3,
+                            "end_line": 3,
+                            "start_column": 23,
+                            "end_column": 24
+                        }
+                    ],
+                    "relations": [
+                        {
+                            "relation_type": "data_relation: variable_declaration",
+                            "related_block_id": 139666753302768,
+                            "related_block_full_qualifier": "",
+                            "related_project_full_qualifier": "",
+                            "related_block_type": "expression_statement",
+                            "related_variables": [
+                                {
+                                    "name": "c",
+                                    "scope": "local",
+                                    "kind": "variable",
+                                    "type": null,
+                                    "qualified_name": null,
+                                    "is_builtin": false,
+                                    "lineno": 5,
+                                    "col_offset": 23
+                                },
+                                {
+                                    "name": "c",
+                                    "type": "int",
+                                    "comments": [],
+                                    "start_line": 2,
+                                    "end_line": 2
+                                }
+                            ],
+                            "related_call_site": null
+                        },
+                        {
+                            "relation_type": "caller_callee_relation: function_invocation_from_caller",
+                            "related_block_id": 139666835796400,
+                            "related_block_full_qualifier": "",
+                            "related_project_full_qualifier": "",
+                            "related_block_type": "expression_statement",
+                            "related_variables": null,
+                            "related_call_site": {
+                                "method_name": "minus",
+                                "receiver_expr": "module2",
+                                "receiver_type": "Module2",
+                                "argument_types": [
+                                    "int",
+                                    "int"
+                                ],
+                                "return_type": "Module2",
+                                "callee_signature": "src.sub_folder1.module2.Module2",
+                                "is_constructor_call": false,
+                                "start_line": 17,
+                                "start_column": 8,
+                                "end_line": 17,
+                                "end_column": 33
+                            }
+                        }
+                    ]
+                },
+                {
+                    "block_id": 139666753302768,
+                    "block_full_qualifier": "",
+                    "project_full_qualifier": "",
+                    "block_type": "expression_statement",
+                    "start_line": 2,
+                    "end_line": 2,
+                    "meta_data": {
+                        "source_file": "/root/Workspace/python-examples/simple_repo/src/sub_folder1/module2.py"
+                    },
+                    "children": [],
+                    "parent": 139666751898032,
+                    "call_sites": [],
+                    "local_variables": [],
+                    "accessed_variables": [],
+                    "class_attributes": [
+                        {
+                            "name": "c",
+                            "type": "int",
+                            "start_line": 2,
+                            "end_line": 2
+                        }
+                    ],
+                    "func_parameters": [],
+                    "relations": [
+                        {
+                            "relation_type": "data_relation: variable_accessed",
+                            "related_block_id": 139666753305272,
+                            "related_block_full_qualifier": "module2.Module2.minus",
+                            "related_project_full_qualifier": "src.sub_folder1.module2.Module2.minus",
+                            "related_block_type": "function_definition",
+                            "related_variables": [
+                                {
+                                    "name": "c",
+                                    "scope": "local",
+                                    "kind": "variable",
+                                    "type": null,
+                                    "qualified_name": null,
+                                    "is_builtin": false,
+                                    "lineno": 5,
+                                    "col_offset": 23
+                                },
+                                {
+                                    "name": "c",
+                                    "type": "int",
+                                    "comments": [],
+                                    "start_line": 2,
+                                    "end_line": 2
+                                }
+                            ],
+                            "related_call_site": null
+                        }
+                    ]
+                },
+                {
+                    "block_id": 139666751897752,
+                    "block_full_qualifier": "module2.Module2.add",
+                    "project_full_qualifier": "src.sub_folder1.module2.Module2.add",
+                    "block_type": "function_definition",
+                    "start_line": 7,
+                    "end_line": 8,
+                    "meta_data": {
+                        "source_file": "/root/Workspace/python-examples/simple_repo/src/sub_folder1/module2.py"
+                    },
+                    "children": [],
+                    "parent": 139666751898032,
+                    "call_sites": [],
+                    "local_variables": [],
+                    "accessed_variables": [
+                        {
+                            "name": "a",
+                            "scope": "local",
+                            "kind": "variable",
+                            "type": null,
+                            "qualified_name": null,
+                            "is_builtin": false,
+                            "lineno": 8,
+                            "col_offset": 15
+                        },
+                        {
+                            "name": "b",
+                            "scope": "local",
+                            "kind": "variable",
+                            "type": null,
+                            "qualified_name": null,
+                            "is_builtin": false,
+                            "lineno": 8,
+                            "col_offset": 19
+                        }
+                    ],
+                    "class_attributes": [],
+                    "func_parameters": [
+                        {
+                            "name": "self",
+                            "type": "Module2",
+                            "default_value": null,
+                            "start_line": 7,
+                            "end_line": 7,
+                            "start_column": 12,
+                            "end_column": 16
+                        },
+                        {
+                            "name": "a",
+                            "type": null,
+                            "default_value": null,
+                            "start_line": 7,
+                            "end_line": 7,
+                            "start_column": 18,
+                            "end_column": 19
+                        },
+                        {
+                            "name": "b",
+                            "type": null,
+                            "default_value": null,
+                            "start_line": 7,
+                            "end_line": 7,
+                            "start_column": 21,
+                            "end_column": 22
+                        }
+                    ],
+                    "relations": []
+                },
+                {
+                    "block_id": 139666751898032,
+                    "block_full_qualifier": "module2.Module2",
+                    "project_full_qualifier": "src.sub_folder1.module2.Module2",
+                    "block_type": "class_definition",
+                    "start_line": 1,
+                    "end_line": 8,
+                    "meta_data": {
+                        "source_file": "/root/Workspace/python-examples/simple_repo/src/sub_folder1/module2.py"
+                    },
+                    "children": [
+                        139666753305272,
+                        139666753302768,
+                        139666751897752
+                    ],
+                    "parent": 139666751884432,
+                    "call_sites": [],
+                    "local_variables": [],
+                    "accessed_variables": [],
+                    "class_attributes": [],
+                    "func_parameters": [],
+                    "relations": [
+                        {
+                            "relation_type": "caller_callee_relation: function_invocation_from_caller",
+                            "related_block_id": 139666835796400,
+                            "related_block_full_qualifier": "",
+                            "related_project_full_qualifier": "",
+                            "related_block_type": "expression_statement",
+                            "related_variables": null,
+                            "related_call_site": {
+                                "method_name": "Module2",
+                                "receiver_expr": null,
+                                "receiver_type": null,
+                                "argument_types": [],
+                                "return_type": "Module2",
+                                "callee_signature": "src.sub_folder1.module2.Module2",
+                                "is_constructor_call": false,
+                                "start_line": 15,
+                                "start_column": 14,
+                                "end_line": 15,
+                                "end_column": 23
+                            }
+                        }
+                    ]
+                },
+                {
+                    "block_id": 139666751884432,
+                    "block_full_qualifier": "module2",
+                    "project_full_qualifier": "src.sub_folder1.module2",
+                    "block_type": "module",
+                    "start_line": 1,
+                    "end_line": 8,
+                    "meta_data": {
+                        "source_file": "/root/Workspace/python-examples/simple_repo/src/sub_folder1/module2.py"
+                    },
+                    "children": [
+                        139666751898032
+                    ],
+                    "parent": null,
+                    "call_sites": [],
+                    "local_variables": [],
+                    "accessed_variables": [],
+                    "class_attributes": [],
+                    "func_parameters": [],
+                    "relations": []
+                }
+            ]
+        },
+        "/root/Workspace/python-examples/simple_repo/src/sub_folder1/module1.py": {
+            "file_path": "/root/Workspace/python-examples/simple_repo/src/sub_folder1/module1.py",
+            "module_name": "module1",
+            "imports": [],
+            "comments": [],
+            "classes": {
+                ".root.Workspace.python-examples.simple_repo.src.sub_folder1.module1.Module1": {
+                    "name": "Module1",
+                    "signature": ".root.Workspace.python-examples.simple_repo.src.sub_folder1.module1.Module1",
+                    "comments": [],
+                    "code": "class Module1(object):\n\n    def add(self, a, b):\n        a = a + 1\n        return a + b + self.helper(a)\n\n    def helper(self, x):\n        return x * 2",
+                    "base_classes": [
+                        "object"
+                    ],
+                    "methods": {
+                        "add": {
+                            "name": "add",
+                            "path": "/root/Workspace/python-examples/simple_repo/src/sub_folder1/module1.py",
+                            "signature": "module1.Module1.add",
+                            "comments": [],
+                            "decorators": [],
+                            "parameters": [
+                                {
+                                    "name": "self",
+                                    "type": "Module1",
+                                    "default_value": null,
+                                    "start_line": 2,
+                                    "end_line": 2,
+                                    "start_column": 12,
+                                    "end_column": 16
+                                },
+                                {
+                                    "name": "a",
+                                    "type": null,
+                                    "default_value": null,
+                                    "start_line": 2,
+                                    "end_line": 2,
+                                    "start_column": 18,
+                                    "end_column": 19
+                                },
+                                {
+                                    "name": "b",
+                                    "type": null,
+                                    "default_value": null,
+                                    "start_line": 2,
+                                    "end_line": 2,
+                                    "start_column": 21,
+                                    "end_column": 22
+                                }
+                            ],
+                            "return_type": null,
+                            "code": "def add(self, a, b):\n    a = a + 1\n    return a + b + self.helper(a)",
+                            "start_line": 2,
+                            "end_line": 4,
+                            "code_start_line": 3,
+                            "accessed_symbols": [
+                                {
+                                    "name": "a",
+                                    "scope": "local",
+                                    "kind": "variable",
+                                    "type": null,
+                                    "qualified_name": null,
+                                    "is_builtin": false,
+                                    "lineno": 3,
+                                    "col_offset": 12
+                                },
+                                {
+                                    "name": "a",
+                                    "scope": "local",
+                                    "kind": "variable",
+                                    "type": "int",
+                                    "qualified_name": "builtins.int",
+                                    "is_builtin": false,
+                                    "lineno": 4,
+                                    "col_offset": 15
+                                },
+                                {
+                                    "name": "b",
+                                    "scope": "local",
+                                    "kind": "variable",
+                                    "type": null,
+                                    "qualified_name": null,
+                                    "is_builtin": false,
+                                    "lineno": 4,
+                                    "col_offset": 19
+                                },
+                                {
+                                    "name": "a",
+                                    "scope": "local",
+                                    "kind": "variable",
+                                    "type": "int",
+                                    "qualified_name": "builtins.int",
+                                    "is_builtin": false,
+                                    "lineno": 4,
+                                    "col_offset": 35
+                                },
+                                {
+                                    "name": "self",
+                                    "scope": "local",
+                                    "kind": "variable",
+                                    "type": "Module1",
+                                    "qualified_name": "src.sub_folder1.module1.Module1",
+                                    "is_builtin": false,
+                                    "lineno": 4,
+                                    "col_offset": 23
+                                }
+                            ],
+                            "call_sites": [
+                                {
+                                    "method_name": "helper",
+                                    "receiver_expr": "self",
+                                    "receiver_type": "Module1",
+                                    "argument_types": [
+                                        "int"
+                                    ],
+                                    "return_type": "Module1",
+                                    "callee_signature": "src.sub_folder1.module1.Module1",
+                                    "is_constructor_call": false,
+                                    "start_line": 4,
+                                    "start_column": 23,
+                                    "end_line": 4,
+                                    "end_column": 37
+                                }
+                            ],
+                            "local_variables": [
+                                {
+                                    "name": "a",
+                                    "type": "int",
+                                    "initializer": "a + 1",
+                                    "value": null,
+                                    "scope": "function",
+                                    "start_line": 3,
+                                    "end_line": 3,
+                                    "start_column": 8,
+                                    "end_column": 9
+                                }
+                            ],
+                            "cyclomatic_complexity": 2,
+                            "hammock_block": {
+                                "block_id": 139666855860368,
+                                "block_full_qualifier": "module1.Module1.add",
+                                "project_full_qualifier": "src.sub_folder1.module1.Module1.add",
+                                "block_type": "function_definition",
+                                "start_line": 2,
+                                "end_line": 4,
+                                "meta_data": {
+                                    "source_file": "/root/Workspace/python-examples/simple_repo/src/sub_folder1/module1.py"
+                                },
+                                "children": [
+                                    139666855863056
+                                ],
+                                "parent": 139666835215088,
+                                "call_sites": [
+                                    {
+                                        "method_name": "helper",
+                                        "receiver_expr": "self",
+                                        "receiver_type": "Module1",
+                                        "argument_types": [
+                                            "int"
+                                        ],
+                                        "return_type": "Module1",
+                                        "callee_signature": "src.sub_folder1.module1.Module1",
+                                        "is_constructor_call": false,
+                                        "start_line": 4,
+                                        "start_column": 23,
+                                        "end_line": 4,
+                                        "end_column": 37
+                                    }
+                                ],
+                                "local_variables": [],
+                                "accessed_variables": [
+                                    {
+                                        "name": "a",
+                                        "scope": "local",
+                                        "kind": "variable",
+                                        "type": "int",
+                                        "qualified_name": "builtins.int",
+                                        "is_builtin": false,
+                                        "lineno": 4,
+                                        "col_offset": 15
+                                    },
+                                    {
+                                        "name": "b",
+                                        "scope": "local",
+                                        "kind": "variable",
+                                        "type": null,
+                                        "qualified_name": null,
+                                        "is_builtin": false,
+                                        "lineno": 4,
+                                        "col_offset": 19
+                                    },
+                                    {
+                                        "name": "self",
+                                        "scope": "local",
+                                        "kind": "variable",
+                                        "type": "Module1",
+                                        "qualified_name": "src.sub_folder1.module1.Module1",
+                                        "is_builtin": false,
+                                        "lineno": 4,
+                                        "col_offset": 23
+                                    }
+                                ],
+                                "class_attributes": [],
+                                "func_parameters": [
+                                    {
+                                        "name": "self",
+                                        "type": "Module1",
+                                        "default_value": null,
+                                        "start_line": 2,
+                                        "end_line": 2,
+                                        "start_column": 12,
+                                        "end_column": 16
+                                    },
+                                    {
+                                        "name": "a",
+                                        "type": null,
+                                        "default_value": null,
+                                        "start_line": 2,
+                                        "end_line": 2,
+                                        "start_column": 18,
+                                        "end_column": 19
+                                    },
+                                    {
+                                        "name": "b",
+                                        "type": null,
+                                        "default_value": null,
+                                        "start_line": 2,
+                                        "end_line": 2,
+                                        "start_column": 21,
+                                        "end_column": 22
+                                    }
+                                ],
+                                "relations": [
+                                    {
+                                        "relation_type": "caller_callee_relation: function_invocation_to_callee",
+                                        "related_block_id": 139666855860376,
+                                        "related_block_full_qualifier": "module1.Module1.helper",
+                                        "related_project_full_qualifier": "src.sub_folder1.module1.Module1.helper",
+                                        "related_block_type": "function_definition",
+                                        "related_variables": null,
+                                        "related_call_site": {
+                                            "method_name": "helper",
+                                            "receiver_expr": "self",
+                                            "receiver_type": "Module1",
+                                            "argument_types": [
+                                                "int"
+                                            ],
+                                            "return_type": "Module1",
+                                            "callee_signature": "src.sub_folder1.module1.Module1",
+                                            "is_constructor_call": false,
+                                            "start_line": 4,
+                                            "start_column": 23,
+                                            "end_line": 4,
+                                            "end_column": 37
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        "helper": {
+                            "name": "helper",
+                            "path": "/root/Workspace/python-examples/simple_repo/src/sub_folder1/module1.py",
+                            "signature": "module1.Module1.helper",
+                            "comments": [],
+                            "decorators": [],
+                            "parameters": [
+                                {
+                                    "name": "self",
+                                    "type": "Module1",
+                                    "default_value": null,
+                                    "start_line": 6,
+                                    "end_line": 6,
+                                    "start_column": 15,
+                                    "end_column": 19
+                                },
+                                {
+                                    "name": "x",
+                                    "type": "int",
+                                    "default_value": null,
+                                    "start_line": 6,
+                                    "end_line": 6,
+                                    "start_column": 21,
+                                    "end_column": 22
+                                }
+                            ],
+                            "return_type": null,
+                            "code": "def helper(self, x):\n    return x * 2",
+                            "start_line": 6,
+                            "end_line": 7,
+                            "code_start_line": 7,
+                            "accessed_symbols": [
+                                {
+                                    "name": "x",
+                                    "scope": "local",
+                                    "kind": "variable",
+                                    "type": "int",
+                                    "qualified_name": "builtins.int",
+                                    "is_builtin": false,
+                                    "lineno": 7,
+                                    "col_offset": 15
+                                }
+                            ],
+                            "call_sites": [],
+                            "local_variables": [],
+                            "cyclomatic_complexity": 2,
+                            "hammock_block": {
+                                "block_id": 139666855860376,
+                                "block_full_qualifier": "module1.Module1.helper",
+                                "project_full_qualifier": "src.sub_folder1.module1.Module1.helper",
+                                "block_type": "function_definition",
+                                "start_line": 6,
+                                "end_line": 7,
+                                "meta_data": {
+                                    "source_file": "/root/Workspace/python-examples/simple_repo/src/sub_folder1/module1.py"
+                                },
+                                "children": [],
+                                "parent": 139666835215088,
+                                "call_sites": [],
+                                "local_variables": [],
+                                "accessed_variables": [
+                                    {
+                                        "name": "x",
+                                        "scope": "local",
+                                        "kind": "variable",
+                                        "type": "int",
+                                        "qualified_name": "builtins.int",
+                                        "is_builtin": false,
+                                        "lineno": 7,
+                                        "col_offset": 15
+                                    }
+                                ],
+                                "class_attributes": [],
+                                "func_parameters": [
+                                    {
+                                        "name": "self",
+                                        "type": "Module1",
+                                        "default_value": null,
+                                        "start_line": 6,
+                                        "end_line": 6,
+                                        "start_column": 15,
+                                        "end_column": 19
+                                    },
+                                    {
+                                        "name": "x",
+                                        "type": "int",
+                                        "default_value": null,
+                                        "start_line": 6,
+                                        "end_line": 6,
+                                        "start_column": 21,
+                                        "end_column": 22
+                                    }
+                                ],
+                                "relations": [
+                                    {
+                                        "relation_type": "caller_callee_relation: function_invocation_from_caller",
+                                        "related_block_id": 139666855860368,
+                                        "related_block_full_qualifier": "module1.Module1.add",
+                                        "related_project_full_qualifier": "src.sub_folder1.module1.Module1.add",
+                                        "related_block_type": "function_definition",
+                                        "related_variables": null,
+                                        "related_call_site": {
+                                            "method_name": "helper",
+                                            "receiver_expr": "self",
+                                            "receiver_type": "Module1",
+                                            "argument_types": [
+                                                "int"
+                                            ],
+                                            "return_type": "Module1",
+                                            "callee_signature": "src.sub_folder1.module1.Module1",
+                                            "is_constructor_call": false,
+                                            "start_line": 4,
+                                            "start_column": 23,
+                                            "end_line": 4,
+                                            "end_column": 37
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    "attributes": {},
+                    "inner_classes": {},
+                    "start_line": 1,
+                    "end_line": 7,
+                    "hammock_block": {
+                        "block_id": 139666835215088,
+                        "block_full_qualifier": "module1.Module1",
+                        "project_full_qualifier": "src.sub_folder1.module1.Module1",
+                        "block_type": "class_definition",
+                        "start_line": 1,
+                        "end_line": 7,
+                        "meta_data": {
+                            "source_file": "/root/Workspace/python-examples/simple_repo/src/sub_folder1/module1.py"
+                        },
+                        "children": [
+                            139666855860368,
+                            139666855860376
+                        ],
+                        "parent": 139666752036976,
+                        "call_sites": [],
+                        "local_variables": [],
+                        "accessed_variables": [],
+                        "class_attributes": [],
+                        "func_parameters": [],
+                        "relations": [
+                            {
+                                "relation_type": "caller_callee_relation: function_invocation_from_caller",
+                                "related_block_id": 139666835796400,
+                                "related_block_full_qualifier": "",
+                                "related_project_full_qualifier": "",
+                                "related_block_type": "expression_statement",
+                                "related_variables": null,
+                                "related_call_site": {
+                                    "method_name": "Module1",
+                                    "receiver_expr": null,
+                                    "receiver_type": null,
+                                    "argument_types": [],
+                                    "return_type": "Module1",
+                                    "callee_signature": "src.sub_folder1.module1.Module1",
+                                    "is_constructor_call": false,
+                                    "start_line": 14,
+                                    "start_column": 14,
+                                    "end_line": 14,
+                                    "end_column": 23
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            "functions": {},
+            "variables": [],
+            "hammock_block": {
+                "block_id": 139666752036976,
+                "block_full_qualifier": "module1",
+                "project_full_qualifier": "src.sub_folder1.module1",
+                "block_type": "module",
+                "start_line": 1,
+                "end_line": 7,
+                "meta_data": {
+                    "source_file": "/root/Workspace/python-examples/simple_repo/src/sub_folder1/module1.py"
+                },
+                "children": [
+                    139666835215088
+                ],
+                "parent": null,
+                "call_sites": [],
+                "local_variables": [],
+                "accessed_variables": [],
+                "class_attributes": [],
+                "func_parameters": [],
+                "relations": []
+            },
+            "module_hammock_blocks": [
+                {
+                    "block_id": 139666855863056,
+                    "block_full_qualifier": "",
+                    "project_full_qualifier": "",
+                    "block_type": "expression_statement",
+                    "start_line": 3,
+                    "end_line": 3,
+                    "meta_data": {
+                        "source_file": "/root/Workspace/python-examples/simple_repo/src/sub_folder1/module1.py"
+                    },
+                    "children": [],
+                    "parent": 139666855860368,
+                    "call_sites": [],
+                    "local_variables": [
+                        {
+                            "name": "a",
+                            "type": "int",
+                            "initializer": "a + 1",
+                            "value": null,
+                            "scope": "function",
+                            "start_line": 3,
+                            "end_line": 3,
+                            "start_column": 8,
+                            "end_column": 9
+                        }
+                    ],
+                    "accessed_variables": [
+                        {
+                            "name": "a",
+                            "scope": "local",
+                            "kind": "variable",
+                            "type": null,
+                            "qualified_name": null,
+                            "is_builtin": false,
+                            "lineno": 3,
+                            "col_offset": 12
+                        }
+                    ],
+                    "class_attributes": [],
+                    "func_parameters": [],
+                    "relations": []
+                },
+                {
+                    "block_id": 139666855860368,
+                    "block_full_qualifier": "module1.Module1.add",
+                    "project_full_qualifier": "src.sub_folder1.module1.Module1.add",
+                    "block_type": "function_definition",
+                    "start_line": 2,
+                    "end_line": 4,
+                    "meta_data": {
+                        "source_file": "/root/Workspace/python-examples/simple_repo/src/sub_folder1/module1.py"
+                    },
+                    "children": [
+                        139666855863056
+                    ],
+                    "parent": 139666835215088,
+                    "call_sites": [
+                        {
+                            "method_name": "helper",
+                            "receiver_expr": "self",
+                            "receiver_type": "Module1",
+                            "argument_types": [
+                                "int"
+                            ],
+                            "return_type": "Module1",
+                            "callee_signature": "src.sub_folder1.module1.Module1",
+                            "is_constructor_call": false,
+                            "start_line": 4,
+                            "start_column": 23,
+                            "end_line": 4,
+                            "end_column": 37
+                        }
+                    ],
+                    "local_variables": [],
+                    "accessed_variables": [
+                        {
+                            "name": "a",
+                            "scope": "local",
+                            "kind": "variable",
+                            "type": "int",
+                            "qualified_name": "builtins.int",
+                            "is_builtin": false,
+                            "lineno": 4,
+                            "col_offset": 15
+                        },
+                        {
+                            "name": "b",
+                            "scope": "local",
+                            "kind": "variable",
+                            "type": null,
+                            "qualified_name": null,
+                            "is_builtin": false,
+                            "lineno": 4,
+                            "col_offset": 19
+                        },
+                        {
+                            "name": "self",
+                            "scope": "local",
+                            "kind": "variable",
+                            "type": "Module1",
+                            "qualified_name": "src.sub_folder1.module1.Module1",
+                            "is_builtin": false,
+                            "lineno": 4,
+                            "col_offset": 23
+                        }
+                    ],
+                    "class_attributes": [],
+                    "func_parameters": [
+                        {
+                            "name": "self",
+                            "type": "Module1",
+                            "default_value": null,
+                            "start_line": 2,
+                            "end_line": 2,
+                            "start_column": 12,
+                            "end_column": 16
+                        },
+                        {
+                            "name": "a",
+                            "type": null,
+                            "default_value": null,
+                            "start_line": 2,
+                            "end_line": 2,
+                            "start_column": 18,
+                            "end_column": 19
+                        },
+                        {
+                            "name": "b",
+                            "type": null,
+                            "default_value": null,
+                            "start_line": 2,
+                            "end_line": 2,
+                            "start_column": 21,
+                            "end_column": 22
+                        }
+                    ],
+                    "relations": [
+                        {
+                            "relation_type": "caller_callee_relation: function_invocation_to_callee",
+                            "related_block_id": 139666855860376,
+                            "related_block_full_qualifier": "module1.Module1.helper",
+                            "related_project_full_qualifier": "src.sub_folder1.module1.Module1.helper",
+                            "related_block_type": "function_definition",
+                            "related_variables": null,
+                            "related_call_site": {
+                                "method_name": "helper",
+                                "receiver_expr": "self",
+                                "receiver_type": "Module1",
+                                "argument_types": [
+                                    "int"
+                                ],
+                                "return_type": "Module1",
+                                "callee_signature": "src.sub_folder1.module1.Module1",
+                                "is_constructor_call": false,
+                                "start_line": 4,
+                                "start_column": 23,
+                                "end_line": 4,
+                                "end_column": 37
+                            }
+                        }
+                    ]
+                },
+                {
+                    "block_id": 139666855860376,
+                    "block_full_qualifier": "module1.Module1.helper",
+                    "project_full_qualifier": "src.sub_folder1.module1.Module1.helper",
+                    "block_type": "function_definition",
+                    "start_line": 6,
+                    "end_line": 7,
+                    "meta_data": {
+                        "source_file": "/root/Workspace/python-examples/simple_repo/src/sub_folder1/module1.py"
+                    },
+                    "children": [],
+                    "parent": 139666835215088,
+                    "call_sites": [],
+                    "local_variables": [],
+                    "accessed_variables": [
+                        {
+                            "name": "x",
+                            "scope": "local",
+                            "kind": "variable",
+                            "type": "int",
+                            "qualified_name": "builtins.int",
+                            "is_builtin": false,
+                            "lineno": 7,
+                            "col_offset": 15
+                        }
+                    ],
+                    "class_attributes": [],
+                    "func_parameters": [
+                        {
+                            "name": "self",
+                            "type": "Module1",
+                            "default_value": null,
+                            "start_line": 6,
+                            "end_line": 6,
+                            "start_column": 15,
+                            "end_column": 19
+                        },
+                        {
+                            "name": "x",
+                            "type": "int",
+                            "default_value": null,
+                            "start_line": 6,
+                            "end_line": 6,
+                            "start_column": 21,
+                            "end_column": 22
+                        }
+                    ],
+                    "relations": [
+                        {
+                            "relation_type": "caller_callee_relation: function_invocation_from_caller",
+                            "related_block_id": 139666855860368,
+                            "related_block_full_qualifier": "module1.Module1.add",
+                            "related_project_full_qualifier": "src.sub_folder1.module1.Module1.add",
+                            "related_block_type": "function_definition",
+                            "related_variables": null,
+                            "related_call_site": {
+                                "method_name": "helper",
+                                "receiver_expr": "self",
+                                "receiver_type": "Module1",
+                                "argument_types": [
+                                    "int"
+                                ],
+                                "return_type": "Module1",
+                                "callee_signature": "src.sub_folder1.module1.Module1",
+                                "is_constructor_call": false,
+                                "start_line": 4,
+                                "start_column": 23,
+                                "end_line": 4,
+                                "end_column": 37
+                            }
+                        }
+                    ]
+                },
+                {
+                    "block_id": 139666835215088,
+                    "block_full_qualifier": "module1.Module1",
+                    "project_full_qualifier": "src.sub_folder1.module1.Module1",
+                    "block_type": "class_definition",
+                    "start_line": 1,
+                    "end_line": 7,
+                    "meta_data": {
+                        "source_file": "/root/Workspace/python-examples/simple_repo/src/sub_folder1/module1.py"
+                    },
+                    "children": [
+                        139666855860368,
+                        139666855860376
+                    ],
+                    "parent": 139666752036976,
+                    "call_sites": [],
+                    "local_variables": [],
+                    "accessed_variables": [],
+                    "class_attributes": [],
+                    "func_parameters": [],
+                    "relations": [
+                        {
+                            "relation_type": "caller_callee_relation: function_invocation_from_caller",
+                            "related_block_id": 139666835796400,
+                            "related_block_full_qualifier": "",
+                            "related_project_full_qualifier": "",
+                            "related_block_type": "expression_statement",
+                            "related_variables": null,
+                            "related_call_site": {
+                                "method_name": "Module1",
+                                "receiver_expr": null,
+                                "receiver_type": null,
+                                "argument_types": [],
+                                "return_type": "Module1",
+                                "callee_signature": "src.sub_folder1.module1.Module1",
+                                "is_constructor_call": false,
+                                "start_line": 14,
+                                "start_column": 14,
+                                "end_line": 14,
+                                "end_column": 23
+                            }
+                        }
+                    ]
+                },
+                {
+                    "block_id": 139666752036976,
+                    "block_full_qualifier": "module1",
+                    "project_full_qualifier": "src.sub_folder1.module1",
+                    "block_type": "module",
+                    "start_line": 1,
+                    "end_line": 7,
+                    "meta_data": {
+                        "source_file": "/root/Workspace/python-examples/simple_repo/src/sub_folder1/module1.py"
+                    },
+                    "children": [
+                        139666835215088
+                    ],
+                    "parent": null,
+                    "call_sites": [],
+                    "local_variables": [],
+                    "accessed_variables": [],
+                    "class_attributes": [],
+                    "func_parameters": [],
+                    "relations": []
+                }
+            ]
+        }
+    }
+}
