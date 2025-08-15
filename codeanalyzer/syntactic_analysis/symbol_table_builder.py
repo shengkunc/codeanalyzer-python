@@ -390,7 +390,12 @@ class SymbolTableBuilder:
                     current_placement = hb_identified
                     for eligible_hb in eligible_hbs:
                         if start_line >= eligible_hb.start_line and end_line <= eligible_hb.end_line:
-                            if (eligible_hb.start_line > current_placement.start_line or eligible_hb.end_line < current_placement.end_line):
+                            # if the call site is within the eligible hammock block
+                            if (eligible_hb.start_line > current_placement.start_line or eligible_hb.end_line < current_placement.end_line): 
+                                # print("Replacement hammock block for call site due to tightening:", eligible_hb.block_id)
+                                current_placement = eligible_hb
+                            elif (eligible_hb.start_line == current_placement.start_line and eligible_hb.end_line == current_placement.end_line and eligible_hb.parent == current_placement.block_id):
+                                # print("Replacement hammock block for call site due to inclusion:", eligible_hb.block_id)
                                 current_placement = eligible_hb
                     already_exists = False
                     for existing_callsites in current_placement.call_sites:
