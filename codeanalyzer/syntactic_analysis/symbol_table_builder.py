@@ -389,7 +389,7 @@ class SymbolTableBuilder:
                     end_line = call_site.end_line
                     current_placement = hb_identified
                     for eligible_hb in eligible_hbs:
-                        if line_number >= eligible_hb.start_line and line_number <= eligible_hb.end_line:
+                        if start_line >= eligible_hb.start_line and end_line <= eligible_hb.end_line:
                             if (eligible_hb.start_line > current_placement.start_line or eligible_hb.end_line < current_placement.end_line):
                                 current_placement = eligible_hb
                     already_exists = False
