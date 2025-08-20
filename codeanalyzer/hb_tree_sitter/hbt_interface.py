@@ -232,14 +232,24 @@ class HammockBlockTreeBuilder:
 
     @staticmethod
     def _build_data_relation_helper(src_block: PyHammockBlock, tgt_block: PyHammockBlock, variable: PySymbol, declaration: PyVariableDeclaration|PyCallableParameter|PyClassAttribute) -> PyHammockBlockRelation:
-        src_block_relation = (PyHammockBlockRelation.builder()
-                                .relation_type("data_relation: variable_declaration")
-                                .related_block_id(tgt_block.block_id)
-                                .related_block_full_qualifier(tgt_block.block_full_qualifier)
-                                .related_project_full_qualifier(tgt_block.project_full_qualifier)
-                                .related_block_type(tgt_block.block_type)
-                                .related_variables((variable, declaration))
-                                .build())
+        if tgt_block.block_type != "import_statement" and tgt_block.block_type != "import_from_statement":
+            src_block_relation = (PyHammockBlockRelation.builder()
+                                    .relation_type("data_relation: variable_declaration")
+                                    .related_block_id(tgt_block.block_id)
+                                    .related_block_full_qualifier(tgt_block.block_full_qualifier)
+                                    .related_project_full_qualifier(tgt_block.project_full_qualifier)
+                                    .related_block_type(tgt_block.block_type)
+                                    .related_variables((variable, declaration))
+                                    .build())
+        else:
+            src_block_relation = (PyHammockBlockRelation.builder()
+                                    .relation_type("data_relation: variable_imported")
+                                    .related_block_id(tgt_block.block_id)
+                                    .related_block_full_qualifier(tgt_block.block_full_qualifier)
+                                    .related_project_full_qualifier(tgt_block.project_full_qualifier)
+                                    .related_block_type(tgt_block.block_type)
+                                    .related_variables((variable, declaration))
+                                    .build())
         tgt_block_relation = (PyHammockBlockRelation.builder()
                                 .relation_type("data_relation: variable_accessed")
                                 .related_block_id(src_block.block_id)
