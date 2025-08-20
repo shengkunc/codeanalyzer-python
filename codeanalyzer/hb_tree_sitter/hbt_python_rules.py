@@ -184,7 +184,7 @@ class PythonTSHBParsingRules:
         print(f"[PYTHON] Dispatched to parse_expression_statement for node: {node.type}")
         print(f"[PYTHON] Expression statement at line {node.start_point.row + 1}")
         # Only parse expression statements that are directly related to function definitions, class definitions, or module level
-        if node.parent and (node.parent.type == "module" or node.parent.type == "block" and node.parent.parent and node.parent.parent.type in ["function_definition", "class_definition", "try_statement"]):
+        if node.parent and (node.parent.type == "module" or node.parent.type == "block" and node.parent.parent and node.parent.parent.type in ["function_definition", "class_definition"]):
             hammock_block = self._base_block_builder(node)
             
             # Find identifiers, variables, and strings in the expression subtree
