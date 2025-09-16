@@ -160,23 +160,23 @@ class PythonTSHBParsingRules:
         hammock_block.project_full_qualifier = block_map[current_parent.id].project_full_qualifier + "." + name_node.text.decode("utf-8") if name_node else ""
         return hammock_block, []
     
-    @parse_ts_node.register("return_statement")
-    def parse_ts_node_impl(self, node: Node, block_map: Dict, source_file: str) -> TSHammockBlock: # Tested!
-        """Parse Python return_statement"""
-        print(f"[PYTHON] Dispatched to return_statement for node: {node.type}")
-        print(f"[PYTHON] Return statement at line {node.start_point.row + 1}")
-        # Find identifiers, variables, and strings in the expression subtree
-        identifiers, variables, strings = self._find_identifiers_locals_strings_in_subtree(node)
-        current_parent = node.parent
-        while current_parent:
-            if current_parent.id in block_map and len(block_map[current_parent.id].block_full_qualifier):
-                break
-            current_parent = current_parent.parent
-        hammock_block = block_map[current_parent.id]
-        hammock_block.local_identifiers.extend(identifiers)
-        hammock_block.local_variables.extend(variables)
-        hammock_block.string_literals.extend(strings)
-        return None, []
+    # @parse_ts_node.register("return_statement")
+    # def parse_ts_node_impl(self, node: Node, block_map: Dict, source_file: str) -> TSHammockBlock: # Tested!
+    #     """Parse Python return_statement"""
+    #     print(f"[PYTHON] Dispatched to return_statement for node: {node.type}")
+    #     print(f"[PYTHON] Return statement at line {node.start_point.row + 1}")
+    #     # Find identifiers, variables, and strings in the expression subtree
+    #     identifiers, variables, strings = self._find_identifiers_locals_strings_in_subtree(node)
+    #     current_parent = node.parent
+    #     while current_parent:
+    #         if current_parent.id in block_map and len(block_map[current_parent.id].block_full_qualifier):
+    #             break
+    #         current_parent = current_parent.parent
+    #     hammock_block = block_map[current_parent.id]
+    #     hammock_block.local_identifiers.extend(identifiers)
+    #     hammock_block.local_variables.extend(variables)
+    #     hammock_block.string_literals.extend(strings)
+    #     return None, []
         
     @parse_ts_node.register("expression_statement")
     def parse_ts_node_impl(self, node: Node, block_map: Dict, source_file: str) -> TSHammockBlock: # Tested!
@@ -408,13 +408,13 @@ class PythonTSHBParsingRules:
         hammock_block.string_literals.extend(strings)
         return hammock_block, []
     
-    @parse_ts_node.register("raise_statement")
-    def parse_ts_node_impl(self, node: Node, block_map: Dict, source_file: str) -> TSHammockBlock:  # Tested!
-        """Parse Python raise statement (context manager)"""
-        print(f"[PYTHON] Dispatched to raise_statement for node: {node.type}")
-        print(f"[PYTHON] Raise statement at line {node.start_point.row + 1}")
-        raise NotImplementedError("Raise statement parsing is not implemented yet.")
-        return None, []
+    # @parse_ts_node.register("raise_statement")
+    # def parse_ts_node_impl(self, node: Node, block_map: Dict, source_file: str) -> TSHammockBlock:  # Tested!
+    #     """Parse Python raise statement (context manager)"""
+    #     print(f"[PYTHON] Dispatched to raise_statement for node: {node.type}")
+    #     print(f"[PYTHON] Raise statement at line {node.start_point.row + 1}")
+    #     raise NotImplementedError("Raise statement parsing is not implemented yet.")
+    #     return None, []
 
     @parse_ts_node.register("match_statement")
     def parse_ts_node_impl(self, node: Node, block_map: Dict, source_file: str) -> TSHammockBlock:  # Tested!
