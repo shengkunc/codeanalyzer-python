@@ -274,9 +274,11 @@ class HammockBlockTreeBuilder:
                     callee_block = None
                     
                     # case 1: if the callee_signature is null it is a nested 
-                    # function part of the sibiling block
+                    # function part of the sibiling block or a plain search in all blocks
                     if callee_signature is None:
                         # find all sibling blocks
+                        if method_name == "check_feature_flag":
+                            pass
                         sibling_blocks = [
                             hb for hb in module_hammock_blocks
                             if hb.block_id != block.block_id and hb.parent == block.parent
@@ -285,6 +287,13 @@ class HammockBlockTreeBuilder:
                             if sb.block_type == "function_definition" and method_name == sb.block_full_qualifier.split(".")[-1]:
                                 callee_block = sb
                                 break
+                        if callee_block is None:
+                            # if not found in sibling blocks, search all blocks in the module
+                            for hb in module_hammock_blocks:
+                                if hb.block_type == "function_definition" and method_name == hb.block_full_qualifier.split(".")[-1]:
+                                    callee_block = hb
+                                    print(f"INFO: Found callee block {hb.block_full_qualifier} for call site {call_site.method_name} in the same module {py_module.module_name}, from case 1, searching all blocks")
+                                    break
                         if callee_block is not None:
                             HammockBlockTreeBuilder._build_caller_callee_relation_helper(
                                 block, 
@@ -292,6 +301,8 @@ class HammockBlockTreeBuilder:
                                 callee_block
                             )
                             continue
+                        else:
+                            print(f"WARN: Cannot find callee block for call site: {call_site.method_name}, from case 1, investigate")
                     
                     # case 2: if the callee_signature is not null and match the method name, but the 
                     # receiver type and expression are both null, module level function call
@@ -300,16 +311,20 @@ class HammockBlockTreeBuilder:
                         callee_py_module = symbol_table.get(callee_path)
                         relevant_blocks = [hb for hb in callee_py_module.module_hammock_blocks]
                         for temp_block in relevant_blocks:
-                            if len(temp_block.project_full_qualifier) and temp_block.project_full_qualifier == callee_signature: 
-                                callee_block = temp_block
-                                break
+                            if len(temp_block.project_full_qualifier):
+                                # print(f"DEBUG: Checking block {temp_block.project_full_qualifier} against callee_signature {callee_signature}")
+                                if temp_block.project_full_qualifier == callee_signature: 
+                                    callee_block = temp_block
+                                    break
                         if callee_block is not None:
                             HammockBlockTreeBuilder._build_caller_callee_relation_helper(
                                 block, 
                                 call_site,
                                 callee_block
                             )
-                            continue     
+                            continue
+                        else:
+                            print(f"WARN: Cannot find callee block for call site: {call_site.method_name}, from case 2, investigate")
                     
                     # case 3:  if the callee_signature is not null and does not match the method name, but the
                     # receiver type or receiver expression is not null, class level method call
@@ -329,6 +344,8 @@ class HammockBlockTreeBuilder:
                                 callee_block
                             )
                             continue
+                        else:
+                            print(f"WARN: Cannot find callee block for call site: {call_site.method_name}, from case 3, investigate")
                     else:
                         print(f"WARN: Unexpected call site: {call_site}, investigate")
                         continue     
